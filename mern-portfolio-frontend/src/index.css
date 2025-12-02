@@ -1,0 +1,42 @@
+body {
+  background-color: #000000;
+  font-family: "Poppins", sans-serif;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.page-container {
+  padding: 60px 0;
+}
+
+.footer {
+  background: #111;
+  padding: 20px 0;
+  text-align: center;
+  color: white;
+  margin-top: 40px;
+}
+
+.card {
+  border-radius: 12px;
+}
+.card img{
+  height: 400px;
+  object-fit: contain;
+}
+li{
+  list-style-type: none; 
+}
+
+/* Add this to your global or component-specific CSS file */
+.card:hover {
+  transition: transform 0.3s ease;  /* Smooth transition for scaling */
+   box-shadow: 0 4px 5px #f1ca02; 
+    transform: scale(1.05);  /* Slightly scale up the card */
+}
+
+
+
