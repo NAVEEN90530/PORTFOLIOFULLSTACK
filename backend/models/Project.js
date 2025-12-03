@@ -17,6 +17,11 @@ const projectSchema = new mongoose.Schema(
       type: [String],
       validate: v => v.length === 3, // exactly 3 taglines
       required: true,
+    },
+
+    badge: {
+      type: Boolean,
+      default: false, // 👈 default value
     }
   },
   { timestamps: true }
