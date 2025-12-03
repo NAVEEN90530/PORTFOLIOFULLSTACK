@@ -14,6 +14,7 @@ export default function ManageProjects() {
     imageUrl: "",
     category: "",
     taglines: ["", "", ""],
+    badge: false, // NEW
   });
 
   // EDIT MODAL STATE
@@ -25,6 +26,7 @@ export default function ManageProjects() {
     imageUrl: "",
     category: "",
     taglines: ["", "", ""],
+    badge: false, // NEW
   });
 
   // CATEGORY FILTER
@@ -42,7 +44,7 @@ export default function ManageProjects() {
       .catch(() => console.error("Failed to fetch projects"));
   };
 
-  // Load all categories
+  // Load categories
   const loadCategories = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/categery");
@@ -52,7 +54,7 @@ export default function ManageProjects() {
     }
   };
 
-  // Handle Create Submit
+  // Create project
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -65,6 +67,7 @@ export default function ManageProjects() {
         imageUrl: "",
         category: "",
         taglines: ["", "", ""],
+        badge: false,
       });
       loadProjects();
     } catch (err) {
@@ -89,19 +92,17 @@ export default function ManageProjects() {
     }
   };
 
-  // Base64 Image Upload (Create)
+  // Base64 Image Upload - Create
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setForm({ ...form, imageUrl: reader.result });
-    };
+    reader.onloadend = () => setForm({ ...form, imageUrl: reader.result });
   };
 
-  // Open Edit Modal
+  // Open edit modal
   const openEditModal = (project) => {
     setEditForm({
       _id: project._id,
@@ -110,21 +111,19 @@ export default function ManageProjects() {
       imageUrl: project.imageUrl,
       category: project.category?._id || "",
       taglines: project.taglines || ["", "", ""],
+      badge: project.badge ?? false, // NEW
     });
     setEditModal(true);
   };
 
-  // Base64 Image Upload (Edit)
+  // Base64 Image Upload - Edit
   const handleEditImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
-
-    reader.onloadend = () => {
-      setEditForm({ ...editForm, imageUrl: reader.result });
-    };
+    reader.onloadend = () => setEditForm({ ...editForm, imageUrl: reader.result });
   };
 
   // Update project
@@ -143,7 +142,7 @@ export default function ManageProjects() {
     }
   };
 
-  // FILTER PROJECTS BY CATEGORY
+  // Filter logic
   const filteredProjects =
     filterCategory === "all"
       ? projects
@@ -155,7 +154,7 @@ export default function ManageProjects() {
 
       {/* CREATE FORM */}
       <form className="row g-3 mt-3" onSubmit={handleSubmit}>
-
+        
         {/* Name */}
         <div className="col-md-4">
           <input
@@ -168,22 +167,13 @@ export default function ManageProjects() {
 
         {/* Image Upload */}
         <div className="col-md-4">
-          <input
-            type="file"
-            accept="image/*"
-            className="form-control"
-            onChange={handleImageChange}
-          />
+          <input type="file" accept="image/*" className="form-control" onChange={handleImageChange} />
         </div>
 
         {/* Preview */}
         {form.imageUrl && (
           <div className="col-md-4">
-            <img
-              src={form.imageUrl}
-              alt="Preview"
-              style={{ width: "120px", borderRadius: "4px" }}
-            />
+            <img src={form.imageUrl} alt="Preview" style={{ width: "120px", borderRadius: "4px" }} />
           </div>
         )}
 
@@ -206,9 +196,7 @@ export default function ManageProjects() {
           >
             <option value="">Select Category</option>
             {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
+              <option key={cat._id} value={cat._id}>{cat.name}</option>
             ))}
           </select>
         </div>
@@ -228,6 +216,19 @@ export default function ManageProjects() {
             />
           </div>
         ))}
+
+        {/* Badge Toggle */}
+        <div className="col-md-4">
+          <label className="form-check-label">
+            <input
+              type="checkbox"
+              className="form-check-input me-2"
+              checked={form.badge}
+              onChange={(e) => setForm({ ...form, badge: e.target.checked })}
+            />
+            Show Badge
+          </label>
+        </div>
 
         {/* Submit */}
         <div className="col-12">
@@ -249,9 +250,7 @@ export default function ManageProjects() {
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
+              <option key={cat._id} value={cat._id}>{cat.name}</option>
             ))}
           </select>
         </div>
@@ -265,6 +264,7 @@ export default function ManageProjects() {
             <th>Image</th>
             <th>Description</th>
             <th>Category</th>
+            <th>Badge</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -277,6 +277,16 @@ export default function ManageProjects() {
                 <td><img src={p.imageUrl} width="70" alt="project" /></td>
                 <td>{p.description}</td>
                 <td>{p.category?.name || "Uncategorized"}</td>
+
+                {/* Badge Column */}
+                <td>
+                  {p.badge ? (
+                    <span className="badge bg-success">✔ Yes</span>
+                  ) : (
+                    <span className="badge bg-secondary">No</span>
+                  )}
+                </td>
+
                 <td>
                   <button
                     className="btn btn-warning btn-sm me-2"
@@ -295,12 +305,11 @@ export default function ManageProjects() {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center">
+              <td colSpan="6" className="text-center">
                 No Projects Available
               </td>
             </tr>
           )}
-
         </tbody>
       </table>
 
@@ -322,9 +331,7 @@ export default function ManageProjects() {
                   <input
                     className="form-control mb-2"
                     value={editForm.name}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, name: e.target.value })
-                    }
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                   />
 
                   {/* Image Upload */}
@@ -343,24 +350,18 @@ export default function ManageProjects() {
                   <input
                     className="form-control mb-2"
                     value={editForm.description}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, description: e.target.value })
-                    }
+                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                   />
 
                   {/* Category */}
                   <select
                     className="form-control mb-2"
                     value={editForm.category}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, category: e.target.value })
-                    }
+                    onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
                   >
                     <option value="">Select Category</option>
                     {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>
-                        {cat.name}
-                      </option>
+                      <option key={cat._id} value={cat._id}>{cat.name}</option>
                     ))}
                   </select>
 
@@ -378,12 +379,23 @@ export default function ManageProjects() {
                       placeholder={`Tagline ${i + 1}`}
                     />
                   ))}
+
+                  {/* Badge */}
+                  <label className="form-check-label mb-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input me-2"
+                      checked={editForm.badge}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, badge: e.target.checked })
+                      }
+                    />
+                    Show Badge
+                  </label>
                 </div>
 
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
+                  <button type="button" className="btn btn-secondary"
                     onClick={() => setEditModal(false)}
                   >
                     Cancel
