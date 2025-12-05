@@ -69,7 +69,6 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
-
       {/* ---------------- HERO SECTION ---------------- */}
       <div
         style={{
@@ -139,8 +138,8 @@ export default function Home() {
       {/* ---------------- STATS SECTION ---------------- */}
       <div className="container py-5">
         {!loadingStats ? (
-          <div className="stats-wrapper">
-            <div className="stat-box" data-index="0">
+          <div className="stats-wrapper" style={{ display: "flex", justifyContent: "space-around" }}>
+            <div className="stat-box">
               <FiUsers className="stat-icon" />
               <h2>
                 <CountUp start={0} end={stats.happyCustomers} duration={2} />+
@@ -148,7 +147,7 @@ export default function Home() {
               <p>Happy Customers</p>
             </div>
 
-            <div className="stat-box" data-index="1">
+            <div className="stat-box">
               <FiCheckCircle className="stat-icon" />
               <h2>
                 <CountUp start={0} end={stats.projectsCompleted} duration={2} />+
@@ -156,7 +155,7 @@ export default function Home() {
               <p>Projects Completed</p>
             </div>
 
-            <div className="stat-box" data-index="2">
+            <div className="stat-box">
               <FiCpu className="stat-icon" />
               <h2>
                 <CountUp start={0} end={stats.projectTechnologies} duration={2} />+
@@ -171,8 +170,9 @@ export default function Home() {
 
       {/* ---------------- RECENT PROJECTS ---------------- */}
       <div className="container py-5">
-        <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>Recent Projects</h2>
-
+        <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
+          Recent Projects
+        </h2>
         {loadingProjects ? (
           <p className="text-light">Loading projects...</p>
         ) : badgeProjects.length === 0 ? (
@@ -185,12 +185,9 @@ export default function Home() {
                   <div className="project-img-wrapper">
                     <img src={p.imageUrl} className="project-img" alt={p.name} />
                   </div>
-
                   <div className="project-content">
                     <h5 className="project-title">{p.name}</h5>
-                    <p className="project-desc">
-                      {p.description?.substring(0, 100)}...
-                    </p>
+                    <p className="project-desc">{p.description?.substring(0, 100)}...</p>
                   </div>
                 </div>
               </div>
@@ -199,16 +196,12 @@ export default function Home() {
         )}
       </div>
 
-
       {/* ---------------- INSIGHTS SECTION ---------------- */}
       <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
         Our Latest Insights
       </h2>
-
       <div className="container mt-4">
         <div className="row g-4">
-
-          {/* Reverse Engineering */}
           <div className="col-12 col-md-6 col-lg-4">
             <div className="insight-card">
               <div className="insight-icon">🛠️</div>
@@ -219,7 +212,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Product Design */}
           <div className="col-12 col-md-6 col-lg-4">
             <div className="insight-card">
               <div className="insight-icon">📦</div>
@@ -230,7 +222,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Mold Design */}
           <div className="col-12 col-md-6 col-lg-4">
             <div className="insight-card">
               <div className="insight-icon">🧩</div>
@@ -241,7 +232,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Industrial Design */}
           <div className="col-12 col-md-6 col-lg-4">
             <div className="insight-card">
               <div className="insight-icon">🏭</div>
@@ -252,7 +242,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 3D Printing */}
           <div className="col-12 col-md-6 col-lg-4">
             <div className="insight-card">
               <div className="insight-icon">🖨️</div>
@@ -263,36 +252,28 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
-
+      {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className="choose-us py-5">
         <div className="container">
           <h2 className="section-title text-center mb-5">Why Choose Us</h2>
-
           <div className="row g-4">
-            {/* Item 1 */}
             <div className="col-md-4">
               <div className="choose-card">
-                <div className="choose-icon">
-                  <FiTool />
-                </div>
+                <div className="choose-icon"><FiTool /></div>
                 <h5 className="choose-number">01</h5>
-                <h5 className="choose-title"> End to End Support</h5>
+                <h5 className="choose-title">End to End Support</h5>
                 <p className="choose-desc">
                   We help design and develop your product under one roof. We are the one-stop solution for design, development, and manufacturing your product enclosures and parts. With access to over 5 different technologies and 50+ different materials, we make design to production seamless.
                 </p>
               </div>
             </div>
 
-            {/* Item 2 */}
             <div className="col-md-4">
               <div className="choose-card">
-                <div className="choose-icon">
-                  <FiStar />
-                </div>
+                <div className="choose-icon"><FiStar /></div>
                 <h5 className="choose-number">02</h5>
                 <h5 className="choose-title">Superior Finish</h5>
                 <p className="choose-desc">
@@ -301,12 +282,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Item 3 */}
             <div className="col-md-4">
               <div className="choose-card">
-                <div className="choose-icon">
-                  <FiCpu />
-                </div>
+                <div className="choose-icon"><FiCpu /></div>
                 <h5 className="choose-number">03</h5>
                 <h5 className="choose-title">Technical Expertise</h5>
                 <p className="choose-desc">
@@ -319,11 +297,7 @@ export default function Home() {
       </section>
 
       <Testimonials />
-
       <Contact />
-
-
-
     </div>
   );
 }
