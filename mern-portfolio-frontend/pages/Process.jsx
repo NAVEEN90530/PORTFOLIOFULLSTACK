@@ -13,17 +13,17 @@ export default function Process() {
   ];
 
   const colors = ["#FFD700","#FFB347","#FF6F61","#8BC34A","#4CAF50","#00BCD4","#2196F3","#9C27B0"];
-  const radius = 150; // Radius of circle
+  const radius = 150;
 
   return (
     <div className="container py-5" style={{ color: "#EDEDED", fontFamily: "Arial, sans-serif" }}>
-      <h2 className="text-center mb-5" style={{ color: "#FFD700", fontWeight: 600 }}>
+      <h2 className="text-center mb-5" style={{ color: "#FFD700", fontWeight: 600, textShadow: "0 0 8px rgba(212,175,55,0.7)" }}>
         Steps We Followed: Design & Development
       </h2>
 
       <div style={{ position: "relative", width: "400px", height: "400px", margin: "0 auto" }}>
         {steps.map((step, index) => {
-          const angle = (360 / steps.length) * index - 90; // Start from top
+          const angle = (360 / steps.length) * index - 90;
           const radians = (angle * Math.PI) / 180;
           const x = radius * Math.cos(radians);
           const y = radius * Math.sin(radians);
@@ -48,13 +48,19 @@ export default function Process() {
                 boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
                 textAlign: "center",
                 padding: "5px",
+                transition: "transform 0.3s, box-shadow 0.3s",
+                cursor: "pointer",
               }}
+              title={step.desc}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               {step.name}
             </div>
           );
         })}
 
+        {/* Descriptions */}
         {steps.map((step, index) => {
           const angle = (360 / steps.length) * index - 90;
           const radians = (angle * Math.PI) / 180;
@@ -72,7 +78,7 @@ export default function Process() {
                 width: "140px",
                 fontSize: "0.8rem",
                 color: "#EDEDED",
-                textAlign: textAlign,
+                textAlign,
                 transform: x < 0 ? "translateX(-100%)" : "",
               }}
             >
@@ -110,10 +116,12 @@ export function DesignStages() {
   ];
 
   return (
+
     <div className="container py-5" style={{ fontFamily: "Arial, sans-serif", color: "#EDEDED" }}>
+      <div className="gold-line"></div>
       <h2 className="mb-4" style={{ fontWeight: 600, color: "#FFD700" }}>Stages of Design</h2>
 
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
         {steps.map((step, index) => (
           <div key={index} style={{ display: "flex", alignItems: "center" }}>
             <div
@@ -126,7 +134,12 @@ export function DesignStages() {
                 clipPath: "polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%)",
                 textAlign: "center",
                 minWidth: "100px",
+                transition: "transform 0.3s",
+                cursor: "default",
               }}
+              title={step.name}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               {step.name}
             </div>

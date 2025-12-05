@@ -15,92 +15,63 @@ import Home from "../pages/Home";
 import Projects from "../pages/Projects";
 import Services from "../pages/Services";
 import PrivateRoute from "../routes/PrivateRoute";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import NotFound from "../pages/NotFound";
 import Process, { DesignStages } from "../pages/Process";
 import Contact from "../pages/Contact";
+import AppNavbar from "../components/AppNavbar";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
   return (
     <BrowserRouter>
-      {/* Conditionally render the navbar */}
-      <Navbar />
-      <Routes>
+      {/* Toast notifications container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000} // closes after 3s
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
+      <Routes>
         {/* Public */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/process" element={<Process />} />
-        <Route path="/touch" element={<Contact />} />
+        <Route path="/" element={<><AppNavbar /><Home /></>} />
+        <Route path="/about" element={<><AppNavbar /><About /></>} />
+        <Route path="/services" element={<><AppNavbar /><Services /></>} />
+        <Route path="/projects" element={<><AppNavbar /><Projects /></>} />
+        <Route path="/process" element={<><AppNavbar /><Process /><DesignStages /></>} />
+        <Route path="/touch" element={<><AppNavbar /><Contact /></>} />
 
         {/* Admin */}
         <Route path="/admin/login" element={<Login />} />
 
         {/* Admin Routes */}
-        <Route path="/admin/dashboard" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <Dashboard />
-          </PrivateRoute>
-        } />
+        <Route path="/admin/dashboard" element={<PrivateRoute><AdminNavbar /><Dashboard /></PrivateRoute>} />
+        <Route path="/admin/projects" element={<PrivateRoute><AdminNavbar /><ManageProjects /></PrivateRoute>} />
+        <Route path="/admin/testimonials" element={<PrivateRoute><AdminNavbar /><ManageTestimonials /></PrivateRoute>} />
+        <Route path="/admin/contacts" element={<PrivateRoute><AdminNavbar /><ManageContact /></PrivateRoute>} />
+        <Route path="/admin/links" element={<PrivateRoute><AdminNavbar /><ManageLinks /></PrivateRoute>} />
+        <Route path="/admin/adminpage" element={<PrivateRoute><AdminNavbar /><AdminBoard /></PrivateRoute>} />
+        <Route path="/admin/stats" element={<PrivateRoute><AdminNavbar /><ManageStats /></PrivateRoute>} />
+        <Route path="/admin/category" element={<PrivateRoute><AdminNavbar /><CategoryCrudPage /></PrivateRoute>} />
 
-        <Route path="/admin/projects" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <ManageProjects />
-          </PrivateRoute>
-        } />
-
-        <Route path="/admin/testimonials" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <ManageTestimonials />
-          </PrivateRoute>
-        } />
-
-        <Route path="/admin/contacts" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <ManageContact />
-          </PrivateRoute>
-        } />
-
-        <Route path="/admin/links" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <ManageLinks />
-          </PrivateRoute>
-        } />
-
-        <Route path="/admin/adminpage" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <AdminBoard />
-          </PrivateRoute>
-        } />
-
-        <Route path="/admin/stats" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <ManageStats />
-          </PrivateRoute>
-        } />
-
-        <Route path="/admin/category" element={
-          <PrivateRoute>
-            <AdminNavbar />
-            <CategoryCrudPage />
-          </PrivateRoute>
-        } />
-        <Route path="*" element={<NotFound />} />  {/* This will catch all unmatched routes */}
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
+
       <Footer />
     </BrowserRouter>
   );
 }
+
 
 export default App;

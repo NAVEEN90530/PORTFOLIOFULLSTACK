@@ -1,109 +1,156 @@
 import { useEffect, useState } from "react";
 import API from "../../api/api";
+import { toast } from "react-toastify";
 
 export default function ManageTestimonials() {
   const [testimonials, setTestimonials] = useState([]);
   const [form, setForm] = useState({ name: "", companyName: "", content: "" });
-  
-  // --- EDIT STATES ---
+
   const [editModal, setEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ _id: "", name: "", companyName: "", content: "" });
 
-  // Load testimonials
-  const loadTestimonials = () => {
-    API.get("/testimonials").then(res => setTestimonials(res.data));
+  const loadTestimonials = async () => {
+    try {
+      const res = await API.get("/testimonials");
+      setTestimonials(res.data);
+    } catch {
+      toast.error("Failed to load testimonials");
+    }
   };
 
   useEffect(() => {
     loadTestimonials();
   }, []);
 
-  // CREATE TESTIMONIAL
+  // CREATE
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await API.post("/testimonials", form);
-    setForm({ name: "", companyName: "", content: "" });
-    loadTestimonials();
-  };
-
-  // DELETE TESTIMONIAL
-  const deleteItem = async (id) => {
-    if (window.confirm("Delete?")) {
-      await API.delete(`/testimonials/${id}`);
+    try {
+      await API.post("/testimonials", form);
+      setForm({ name: "", companyName: "", content: "" });
       loadTestimonials();
+      toast.success("Testimonial added!");
+    } catch {
+      toast.error("Failed to add testimonial");
     }
   };
 
-  // OPEN EDIT MODAL
-  const openEditModal = (testimonial) => {
-    setEditForm({
-      _id: testimonial._id,
-      name: testimonial.name,
-      companyName: testimonial.companyName,
-      content: testimonial.content,
-    });
+  // DELETE
+  const deleteItem = async (id) => {
+    if (!window.confirm("Delete this testimonial?")) return;
+    try {
+      await API.delete(`/testimonials/${id}`);
+      loadTestimonials();
+      toast.success("Deleted successfully");
+    } catch {
+      toast.error("Failed to delete");
+    }
+  };
+
+  // EDIT
+  const openEditModal = (t) => {
+    setEditForm(t);
     setEditModal(true);
   };
 
-  // UPDATE TESTIMONIAL
   const handleUpdate = async (e) => {
     e.preventDefault();
-    await API.put(`/testimonials/${editForm._id}`, editForm);
-    setEditModal(false);
-    loadTestimonials();
+    try {
+      await API.put(`/testimonials/${editForm._id}`, editForm);
+      setEditModal(false);
+      loadTestimonials();
+      toast.success("Updated successfully!");
+    } catch {
+      toast.error("Failed to update testimonial");
+    }
   };
 
   return (
-    <div className="container py-4">
-      <h2>Manage Testimonials</h2>
+    <div className="container py-4" style={{ marginLeft: "260px" }}>
+      <h2
+        className="text-center mb-4 fw-bold"
+        style={{ color: "var(--button-gold)", textShadow: "0 0 10px rgba(212,175,55,0.6)" }}
+      >
+        Manage Testimonials
+      </h2>
 
       {/* CREATE FORM */}
-      <form className="row g-3 mt-3" onSubmit={handleSubmit}>
-        <div className="col-md-3">
-          <input
-            className="form-control"
-            placeholder="Client Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-        </div>
+      <div
+        className="p-4 mb-4"
+        style={{
+          backgroundColor: "var(--rich-black)",
+          border: "1px solid var(--primary-gold)",
+          borderRadius: "10px",
+          boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+        }}
+      >
+        <form className="row g-3" onSubmit={handleSubmit}>
+          {/* Name */}
+          <div className="col-md-4">
+            <label className="form-label" style={{ color: "var(--button-gold)" }}>
+              Client Name
+            </label>
+            <input
+              className="form-control"
+              placeholder="Enter client name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              style={{ backgroundColor: "#0F0F0F", color: "#fff", border: "1px solid var(--button-gold)" }}
+            />
+          </div>
 
-        <div className="col-md-3">
-          <input
-            className="form-control"
-            placeholder="Client Company Name"
-            value={form.companyName}
-            onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-          />
-        </div>
+          {/* Company Name */}
+          <div className="col-md-4">
+            <label className="form-label" style={{ color: "var(--button-gold)" }}>
+              Client Company Name
+            </label>
+            <input
+              className="form-control"
+              placeholder="Enter company name"
+              value={form.companyName}
+              onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+              style={{ backgroundColor: "#0F0F0F", color: "#fff", border: "1px solid var(--button-gold)" }}
+            />
+          </div>
 
-        <div className="col-md-3">
-          <input
-            className="form-control"
-            placeholder="Message"
-            value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-          />
-        </div>
+          {/* Message */}
+          <div className="col-md-4">
+            <label className="form-label" style={{ color: "var(--button-gold)" }}>
+              Message
+            </label>
+            <input
+              className="form-control"
+              placeholder="Enter testimonial"
+              value={form.content}
+              onChange={(e) => setForm({ ...form, content: e.target.value })}
+              style={{ backgroundColor: "#0F0F0F", color: "#fff", border: "1px solid var(--button-gold)" }}
+            />
+          </div>
 
-        <div className="col-md-2">
-          <button className="btn btn-primary w-100">Add</button>
-        </div>
-      </form>
+          <div className="col-md-12">
+            <button
+              className="btn w-100"
+              style={{ backgroundColor: "var(--button-gold)", color: "#000", fontWeight: "600" }}
+            >
+              Add Testimonial
+            </button>
+          </div>
+        </form>
+      </div>
 
-      <hr />
-
-      {/* TESTIMONIAL TABLE */}
-      <table className="table mt-3">
+      {/* TABLE */}
+      <table
+        className="table table-dark table-striped"
+        style={{ border: "1px solid var(--primary-gold)", borderRadius: "10px", overflow: "hidden" }}
+      >
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Client Company Name</th>
-            <th>Message</th>
-            <th>Actions</th>
+          <tr style={{ background: "#000" }}>
+            <th style={{ color: "var(--button-gold)" }}>Name</th>
+            <th style={{ color: "var(--button-gold)" }}>Company</th>
+            <th style={{ color: "var(--button-gold)" }}>Message</th>
+            <th style={{ color: "var(--button-gold)" }}>Actions</th>
           </tr>
         </thead>
-
         <tbody>
           {testimonials.map((t) => (
             <tr key={t._id}>
@@ -125,43 +172,70 @@ export default function ManageTestimonials() {
 
       {/* EDIT MODAL */}
       {editModal && (
-        <div className="modal d-block" style={{ background: "#00000070" }}>
+        <div className="modal d-block" style={{ background: "#00000090", backdropFilter: "blur(4px)" }}>
           <div className="modal-dialog">
-            <div className="modal-content">
+            <div
+              className="modal-content"
+              style={{
+                background: "var(--rich-black)",
+                color: "var(--text-light)",
+                border: "1px solid var(--primary-gold)",
+                boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+              }}
+            >
               <div className="modal-header">
-                <h5 className="modal-title">Edit Testimonial</h5>
-                <button className="btn-close" onClick={() => setEditModal(false)}></button>
+                <h5 className="modal-title" style={{ color: "var(--button-gold)" }}>
+                  Edit Testimonial
+                </h5>
+                <button className="btn-close" style={{ filter: "invert(1)" }} onClick={() => setEditModal(false)}></button>
               </div>
 
               <form onSubmit={handleUpdate}>
                 <div className="modal-body">
+                  {/* Name */}
+                  <label className="form-label" style={{ color: "var(--button-gold)" }}>
+                    Client Name
+                  </label>
                   <input
-                    className="form-control mb-2"
-                    placeholder="Client Name"
+                    className="form-control mb-3"
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    style={{ background: "#0F0F0F", color: "#fff", border: "1px solid var(--button-gold)" }}
                   />
 
+                  {/* Company */}
+                  <label className="form-label" style={{ color: "var(--button-gold)" }}>
+                    Client Company Name
+                  </label>
                   <input
-                    className="form-control mb-2"
-                    placeholder="Client Company Name"
+                    className="form-control mb-3"
                     value={editForm.companyName}
                     onChange={(e) => setEditForm({ ...editForm, companyName: e.target.value })}
+                    style={{ background: "#0F0F0F", color: "#fff", border: "1px solid var(--button-gold)" }}
                   />
 
+                  {/* Message */}
+                  <label className="form-label" style={{ color: "var(--button-gold)" }}>
+                    Message
+                  </label>
                   <input
-                    className="form-control mb-2"
-                    placeholder="Message"
+                    className="form-control mb-3"
                     value={editForm.content}
                     onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
+                    style={{ background: "#0F0F0F", color: "#fff", border: "1px solid var(--button-gold)" }}
                   />
                 </div>
 
                 <div className="modal-footer">
-                  <button className="btn btn-secondary" onClick={() => setEditModal(false)} type="button">
+                  <button className="btn btn-secondary" type="button" onClick={() => setEditModal(false)}>
                     Cancel
                   </button>
-                  <button className="btn btn-primary">Update</button>
+                  <button
+                    className="btn"
+                    style={{ backgroundColor: "var(--button-gold)", color: "#000", fontWeight: "600" }}
+                  >
+                    Update
+                  </button>
                 </div>
               </form>
             </div>

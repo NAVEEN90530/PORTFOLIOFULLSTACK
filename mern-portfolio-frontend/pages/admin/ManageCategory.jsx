@@ -1,157 +1,192 @@
 import React, { useState, useEffect } from "react";
 import { listCategories, createCategory, updateCategory, deleteCategory } from "../../api/category";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CategoryCrudPage = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
 
-  // Fetch categories on page load
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await listCategories();
         setCategories(data);
       } catch (err) {
-        setError("Failed to fetch categories");
+        toast.error("Failed to fetch categories");
       }
     };
     fetchCategories();
   }, []);
 
-  // Handle creating a category
   const handleCreate = async (e) => {
     e.preventDefault();
-    if (!name.trim()) {
-      setError("Category name cannot be empty");
-      return;
-    }
+    if (!name.trim()) return toast.warning("Category name cannot be empty");
 
     setLoading(true);
     try {
-      // Check if the category already exists (client-side validation)
       if (categories.some((cat) => cat.name.toLowerCase() === name.toLowerCase())) {
-        setError("Category with this name already exists");
+        toast.warning("Category already exists!");
         return;
       }
 
-      // Create category
       const createdCategory = await createCategory({ name });
       setCategories([...categories, createdCategory]);
       setName("");
-      setError("");
+      toast.success("Category created successfully!");
     } catch (err) {
-      setError("Failed to create category");
+      toast.error("Failed to create category");
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle selecting a category for editing
   const handleEdit = (category) => {
     setSelectedCategory(category);
     setName(category.name);
   };
 
-  // Handle updating a category
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!name.trim()) {
-      setError("Category name cannot be empty");
-      return;
-    }
+    if (!name.trim()) return toast.warning("Category cannot be empty");
 
     setLoading(true);
     try {
-      // Update category
       const updatedCategory = await updateCategory(selectedCategory._id, { name });
       setCategories(categories.map((cat) => (cat._id === updatedCategory._id ? updatedCategory : cat)));
       setSelectedCategory(null);
       setName("");
-      setError("");
+
+      toast.success("Category updated!");
     } catch (err) {
-      setError("Failed to update category");
+      toast.error("Failed to update category");
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle deleting a category
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
-      setLoading(true);
-      try {
-        await deleteCategory(id);
-        setCategories(categories.filter((cat) => cat._id !== id));
-      } catch (err) {
-        setError("Failed to delete category");
-      } finally {
-        setLoading(false);
-      }
+    if (!window.confirm("Delete this category?")) return;
+
+    setLoading(true);
+    try {
+      await deleteCategory(id);
+      setCategories(categories.filter((cat) => cat._id !== id));
+
+      toast.success("Category deleted!");
+    } catch (err) {
+      toast.error("Failed to delete category");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container py-4" >
-      <h1 className="mb-4 text-center">{selectedCategory ? "Edit" : "Create"} Category</h1>
+    <div className="container py-4" style={{ marginLeft: "260px" }}>
+      <h1 className="text-center mb-4" style={{ color: "var(--button-gold)" }}>
+        {selectedCategory ? "Edit Category" : "Create Category"}
+      </h1>
 
-      {/* Display Error */}
-      {error && <div className="alert alert-danger">{error}</div>}
+      {/* Form Card */}
+      <div
+        className="p-4 mb-5"
+        style={{
+          background: "#1A1A1A",
+          borderRadius: "10px",
+          boxShadow: "0 0 15px rgba(212,175,55,0.2)",
+          maxWidth: "600px",
+          margin: "0 auto",
+          border: "1px solid var(--button-gold)",
+        }}
+      >
+        <form onSubmit={selectedCategory ? handleUpdate : handleCreate}>
+          <label className="form-label" style={{ color: "var(--button-gold)" }}>
+            Category Name
+          </label>
 
-      {/* Category Form */}
-      <form onSubmit={selectedCategory ? handleUpdate : handleCreate}>
-        <div className="mb-3">
-          <label htmlFor="categoryName" className="form-label">Category Name</label>
           <input
             type="text"
-            className="form-control"
-            id="categoryName"
+            className="form-control mb-3"
+            placeholder="Enter category..."
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
+            style={{
+              backgroundColor: "#0F0F0F",
+              color: "#fff",
+              border: "1px solid var(--button-gold)",
+            }}
           />
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? (selectedCategory ? "Saving..." : "Creating...") : selectedCategory ? "Save Changes" : "Create Category"}
-        </button>
-        {selectedCategory && (
+
           <button
-            type="button"
-            className="btn btn-secondary ms-2"
-            onClick={() => {
-              setSelectedCategory(null);
-              setName(""); // Reset form when canceling edit
+            type="submit"
+            className="btn w-100"
+            disabled={loading}
+            style={{
+              backgroundColor: "var(--button-gold)",
+              color: "#0A0A0A",
+              fontWeight: 600,
+              transition: "0.3s",
             }}
           >
-            Cancel
+            {loading
+              ? selectedCategory
+                ? "Saving..."
+                : "Creating..."
+              : selectedCategory
+              ? "Save Changes"
+              : "Create Category"}
           </button>
-        )}
-      </form>
 
-      <hr className="my-5" />
+          {selectedCategory && (
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mt-2"
+              onClick={() => {
+                setSelectedCategory(null);
+                setName("");
+              }}
+            >
+              Cancel
+            </button>
+          )}
+        </form>
+      </div>
 
-      {/* Display Categories */}
-      <h2>Category List</h2>
-      <table className="table table-striped">
+      {/* Category Table */}
+      <h2 style={{ color: "var(--button-gold)" }}>Category List</h2>
+
+      <table
+        className="table table-dark table-striped"
+        style={{
+          borderRadius: "10px",
+          overflow: "hidden",
+          border: "1px solid var(--button-gold)",
+        }}
+      >
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Actions</th>
+          <tr style={{ backgroundColor: "#000" }}>
+            <th style={{ color: "var(--button-gold)" }}>Name</th>
+            <th style={{ color: "var(--button-gold)" }}>Actions</th>
           </tr>
         </thead>
+
         <tbody>
           {categories.map((category) => (
             <tr key={category._id}>
               <td>{category.name}</td>
               <td>
-                <button className="btn btn-warning btn-sm" onClick={() => handleEdit(category)}>
+                <button
+                  className="btn btn-warning btn-sm me-2"
+                  onClick={() => handleEdit(category)}
+                >
                   Edit
                 </button>
-                <button className="btn btn-danger btn-sm ms-2" onClick={() => handleDelete(category._id)}>
+
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDelete(category._id)}
+                >
                   Delete
                 </button>
               </td>

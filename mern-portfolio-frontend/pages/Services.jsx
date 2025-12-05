@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // <-- import navigate
 import API from "../api/api";
+import Projects from "./Projects";
 
 export default function Services() {
   const navigate = useNavigate(); // for redirect
@@ -56,7 +57,7 @@ export default function Services() {
         ))}
       </div>
 
-      <div class="gold-line"></div>
+      <div className="gold-line"></div>
 
       {/* Industries Section */}
       <div className="container py-5">
@@ -78,6 +79,11 @@ export default function Services() {
           </div>
         ))}
       </div>
+
+         <div className="gold-line"></div>
+
+      <Projects />
+
     </div>
       </div>
 

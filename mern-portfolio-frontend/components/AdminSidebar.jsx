@@ -1,4 +1,17 @@
 import { Link, NavLink } from "react-router-dom";
+import API from "../api/api";
+
+
+const handleLogout = async () => {
+  try {
+    await API.post("/auth/logout"); // call your backend logout
+    sessionStorage.removeItem("authToken"); // optional if you store token
+    window.location.href = "/admin/login"; // redirect to login page
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
+
 
 const AdminNavbar = () => {
   return (
@@ -57,7 +70,6 @@ const AdminNavbar = () => {
 
         <hr style={{ borderColor: "var(--primary-gold)" }} />
 
-        {/* Logout */}
         <li className="nav-item">
           <button
             className="btn w-100"
@@ -66,11 +78,12 @@ const AdminNavbar = () => {
               color: "var(--rich-black)",
               fontWeight: 600,
             }}
-            onClick={() => sessionStorage.removeItem("authToken")}
+            onClick={handleLogout} // 👈 use the function
           >
             Logout
           </button>
         </li>
+
       </ul>
     </div>
   );

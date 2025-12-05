@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../api/api.js";
+import { toast } from "react-toastify";
 
 export default function ManageStats() {
   const [stats, setStats] = useState({
@@ -14,18 +15,17 @@ export default function ManageStats() {
     projectTechnologies: ""
   });
 
-  useEffect(() => {
-    API.get("/settings")
-      .then((res) => setStatsget(res.data.stats))
-      .catch(() => {});
-  }, [stats]);
-
+  // Load stats once
   const loadStats = () => {
-    API.get("/settings").then((res) => {
-      if (res.data.stats) {
-        setStats(res.data.stats);
-      }
-    });
+    API.get("/settings")
+      .then((res) => {
+        if (res.data.stats) {
+          setStatsget(res.data.stats);
+        }
+      })
+      .catch(() => {
+        toast.error("Failed to load stats");
+      });
   };
 
   useEffect(() => {
@@ -34,10 +34,15 @@ export default function ManageStats() {
 
   const updateStats = async (e) => {
     e.preventDefault();
+
     try {
       await API.put("/settings/stats", stats);
-      loadStats(); // Reload stats to show the updated values
-      // Clear the inputs after the update
+
+      toast.success("Stats updated successfully!");
+
+      loadStats(); // refresh display
+
+      // clear input fields
       setStats({
         happyCustomers: "",
         projectsCompleted: "",
@@ -45,6 +50,7 @@ export default function ManageStats() {
       });
     } catch (error) {
       console.error("Failed to update stats:", error);
+      toast.error("Failed to update stats!");
     }
   };
 
@@ -61,8 +67,10 @@ export default function ManageStats() {
               type="number"
               className="form-control form-control-lg"
               placeholder="Happy Customers"
-              
-              onChange={(e) => setStats({ ...stats, happyCustomers: e.target.value })}
+              value={stats.happyCustomers}
+              onChange={(e) =>
+                setStats({ ...stats, happyCustomers: e.target.value })
+              }
             />
           </div>
 
@@ -72,8 +80,10 @@ export default function ManageStats() {
               type="number"
               className="form-control form-control-lg"
               placeholder="Projects Completed"
-              
-              onChange={(e) => setStats({ ...stats, projectsCompleted: e.target.value })}
+              value={stats.projectsCompleted}
+              onChange={(e) =>
+                setStats({ ...stats, projectsCompleted: e.target.value })
+              }
             />
           </div>
 
@@ -83,8 +93,10 @@ export default function ManageStats() {
               type="text"
               className="form-control form-control-lg"
               placeholder="Project Technologies"
-              
-              onChange={(e) => setStats({ ...stats, projectTechnologies: e.target.value })}
+              value={stats.projectTechnologies}
+              onChange={(e) =>
+                setStats({ ...stats, projectTechnologies: e.target.value })
+              }
             />
           </div>
 

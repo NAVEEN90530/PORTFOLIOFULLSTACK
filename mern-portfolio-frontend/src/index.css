@@ -59,6 +59,7 @@ body {
   transition: var(--transition-smooth);
 }
 
+/* Hover effect for links */
 .nav-link:hover {
   color: var(--primary-gold) !important;
   transform: translateY(-2px);
@@ -85,6 +86,34 @@ body {
 .navbar-collapse {
   transition: var(--transition-smooth);
 }
+
+/* Custom Navbar Link Styles */
+.goldactive {
+  color: #FFD700 !important; /* Gold color for active link */
+  font-weight: 600 !important; /* Bold font for active link */
+  transform: translateY(-2px); /* Make it feel active even when clicked */
+}
+
+/* Light color for inactive links */
+.lightactive {
+  color: #EDEDED !important; /* Light color for inactive link */
+  font-weight: 400 !important; /* Regular font for inactive link */
+}
+
+/* Active link styles for NavLink */
+.nav-link.active {
+  color: #FFD700 !important;
+  font-weight: 600 !important;
+  transform: translateY(-2px);
+}
+
+/* Hover effect for all nav links */
+.nav-link:hover {
+  background-color: rgba(255, 215, 0, 0.1); /* Light gold background on hover */
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+}
+
 
 /* ===============================
    CARDS
@@ -139,25 +168,89 @@ body {
   color: var(--primary-gold);
 }
 
-/* ===============================
-   FOOTER
-================================ */
-.footer {
-  background: var(--rich-black);
-  padding: 20px 0;
-  text-align: center;
+
+/* =============================== */
+/* Footer Styles */
+/* =============================== */
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-links,
+.footer-urls {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer-icons {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer-icons a {
   color: var(--text-light);
-  margin-top: 40px;
-  border-top: 1px solid var(--primary-gold);
+  transition: color 0.3s ease;
 }
 
-footer p {
-  transition: var(--transition-smooth);
+.footer-icons a:hover {
+  color: var(--primary-gold);
 }
 
-footer p:hover {
+/* Footer Text Styling */
+.footer-content p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.footer-content span {
   color: var(--button-gold);
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* Stack footer content vertically on smaller screens */
+  .footer-links,
+  .footer-urls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-icons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Footer Text Alignment */
+  .footer-content p {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    padding: 1rem;
+  }
+
+  /* Adjust icon size on very small screens */
+  .footer-icons a {
+    font-size: 20px;
+  }
+
+  .footer-links a,
+  .footer-urls a {
+    font-size: 0.9rem;
+    margin: 0 10px;
+  }
+}
+
 
 /* ===============================
    TEXT EFFECTS
@@ -959,3 +1052,20 @@ li {
       background: linear-gradient(to right, transparent, var(--primary-gold), transparent);
       margin: 30px 0;
     }
+
+.btn-submit {
+  background-color: #FFD700;
+  color: #0A0A0A;
+  width: 100%;
+  border: none;
+  padding: 10px 0;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #0A0A0A; /* darker shade on hover */
+  color: #FFD700;
+}
+

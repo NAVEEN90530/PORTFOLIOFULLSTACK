@@ -6,8 +6,9 @@ import { NavLink } from "react-router-dom";
 
 // Icons
 import { FiTool, FiSend, FiUsers, FiCheckCircle, FiCpu, FiStar } from "react-icons/fi";
+import ProjectModal from "../components/ProjectModal";  // Ensure correct import
 import Testimonials from "./Testimonials";
-import Contact from "./Contact";
+import SendMessage from "./SendMessage";
 
 export default function Home() {
   const [projects, setProjects] = useState([]);
@@ -16,56 +17,35 @@ export default function Home() {
     projectsCompleted: 0,
     projectTechnologies: 0,
   });
-
+  const [selectedProject, setSelectedProject] = useState(null);  // Modal project state
+  const [showModal, setShowModal] = useState(false);             // Modal visibility state
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
 
-  /* ----------------------------------------
-     STAT APPEAR ANIMATION (BOTTOM → TOP)
-  ---------------------------------------- */
-  useEffect(() => {
-    const boxes = document.querySelectorAll(".stat-box");
+  // Modal functions
+  const openProjectModal = (project) => {
+    setSelectedProject(project);
+    setShowModal(true);
+  };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
+  const closeProjectModal = () => {
+    setSelectedProject(null);
+    setShowModal(false);
+  };
 
-    boxes.forEach((box) => observer.observe(box));
-
-    return () => observer.disconnect();
-  }, []);
-
-  /* ----------------------------------------
-     LOAD PROJECTS
-  ---------------------------------------- */
   useEffect(() => {
     API.get("/projects")
       .then((res) => setProjects(res.data))
       .catch(console.error)
       .finally(() => setLoadingProjects(false));
-  }, []);
 
-  /* ----------------------------------------
-     LOAD STATS
-  ---------------------------------------- */
-  useEffect(() => {
     API.get("/settings")
       .then((res) => setStats(res.data?.stats || {}))
       .catch(console.error)
       .finally(() => setLoadingStats(false));
   }, []);
 
-  const badgeProjects = projects
-    ?.filter((p) => p.badge === true)
-    .slice(-3)
-    .reverse();
+  const badgeProjects = projects.filter((p) => p.badge === true).slice(-3).reverse();
 
   return (
     <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
@@ -89,7 +69,7 @@ export default function Home() {
         <div style={{ maxWidth: "800px" }}>
           <h1
             style={{
-              color: "#FFF",
+              // color: "#FFF",
               fontWeight: "700",
               fontSize: "5rem",
               marginBottom: "1rem",
@@ -99,10 +79,20 @@ export default function Home() {
             Aurox Design Studio
           </h1>
 
+          <h2
+            style={{
+              color: "#EDEDED",
+              fontWeight: "600",
+              fontSize: "1.5rem",
+              textShadow: "0 0 10px #000",
+            }}>
+            Built to be made. Designed to perform.
+          </h2>
+
           <h3
             style={{
               fontWeight: "600",
-              fontSize: "3.1rem",
+              fontSize: "2.5rem",
               textShadow: "0 0 10px #000",
             }}
           >
@@ -141,66 +131,98 @@ export default function Home() {
           <div className="stats-wrapper" style={{ display: "flex", justifyContent: "space-around" }}>
             <div className="stat-box">
               <FiUsers className="stat-icon" />
-              <h2>
-                <CountUp start={0} end={stats.happyCustomers} duration={2} />+
+              <h2 aria-live="polite">
+                <CountUp start={0} end={stats.happyCustomers} duration={2} separator="," />
+                <span>+</span>
               </h2>
               <p>Happy Customers</p>
             </div>
 
             <div className="stat-box">
               <FiCheckCircle className="stat-icon" />
-              <h2>
-                <CountUp start={0} end={stats.projectsCompleted} duration={2} />+
+              <h2 aria-live="polite">
+                <CountUp start={0} end={stats.projectsCompleted} duration={2} separator="," />
+                <span>+</span>
               </h2>
               <p>Projects Completed</p>
             </div>
 
             <div className="stat-box">
               <FiCpu className="stat-icon" />
-              <h2>
-                <CountUp start={0} end={stats.projectTechnologies} duration={2} />+
+              <h2 aria-live="polite">
+                <CountUp start={0} end={stats.projectTechnologies} duration={2} separator="," />
+                <span>+</span>
               </h2>
               <p>Project Technologies</p>
             </div>
           </div>
         ) : (
-          <p style={{ color: "#EDEDED" }}>Loading stats...</p>
-        )}
-      </div>
-
-      {/* ---------------- RECENT PROJECTS ---------------- */}
-      <div className="container py-5">
-        <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
-          Recent Projects
-        </h2>
-        {loadingProjects ? (
-          <p className="text-light">Loading projects...</p>
-        ) : badgeProjects.length === 0 ? (
-          <p className="no-projects">No projects available.</p>
-        ) : (
-          <div className="row">
-            {badgeProjects.map((p) => (
-              <div className="col-md-4 mb-4" key={p._id}>
-                <div className="project-card">
-                  <div className="project-img-wrapper">
-                    <img src={p.imageUrl} className="project-img" alt={p.name} />
-                  </div>
-                  <div className="project-content">
-                    <h5 className="project-title">{p.name}</h5>
-                    <p className="project-desc">{p.description?.substring(0, 100)}...</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="skeleton-loader">
+            {/* Here you can use a skeleton loader for better UX */}
+            <div className="skeleton-box"></div>
+            <div className="skeleton-box"></div>
+            <div className="skeleton-box"></div>
           </div>
         )}
       </div>
+
+
+      <div className="gold-line"></div>
+
+      {/* ---------------- RECENT PROJECTS ---------------- */}
+      <div className="container">
+              <h2 className="section-heading text-center py-3" style={{ color: "#FFD700" }}>
+                Recent Projects
+              </h2>
+              {loadingProjects ? (
+                <p className="text-light">Loading projects...</p>
+              ) : badgeProjects.length === 0 ? (
+                <p className="no-projects">No projects available.</p>
+              ) : (
+                <div className="row">
+                  {badgeProjects.map((p) => (
+                    <div className="col-md-4 mb-4" key={p._id}>
+                      <div
+                        className="project-card"
+                        onClick={() => openProjectModal(p)}  // Open modal
+                        style={{ cursor: "pointer" }}
+                      >
+                        <div className="project-img-wrapper">
+                          <img
+                            src={p.imageUrl || "/path/to/default-image.jpg"}  // Fallback image
+                            className="project-img"
+                            alt={p.name || "Project Image"}
+                            onError={(e) => (e.target.src = "/path/to/default-image.jpg")}
+                          />
+                        </div>
+                        <div className="project-content">
+                          <h5 className="project-title">{p.name}</h5>
+                          <p className="project-desc">{p.description?.substring(0, 100)}...</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+      
+            {/* ---------------- PROJECT MODAL ---------------- */}
+            {selectedProject && showModal && (
+              <ProjectModal
+                showModal={showModal}
+                closeModal={closeProjectModal}
+                selectedProject={selectedProject}
+              />
+            )}
+
+
+      <div className="gold-line"></div>
 
       {/* ---------------- INSIGHTS SECTION ---------------- */}
       <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
         Our Latest Insights
       </h2>
-      <div className="container mt-4">
+      <div className="container mt-4 p-5">
         <div className="row g-4">
           <div className="col-12 col-md-6 col-lg-4">
             <div className="insight-card">
@@ -255,6 +277,8 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="gold-line"></div>
+
       {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className="choose-us py-5">
         <div className="container">
@@ -295,9 +319,10 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <div className="gold-line"></div>
       <Testimonials />
-      <Contact />
+      <div className="gold-line"></div>
+      <SendMessage />
     </div>
   );
 }

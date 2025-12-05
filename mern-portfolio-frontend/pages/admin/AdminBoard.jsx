@@ -9,6 +9,7 @@ import ManageStats from './ManageStats'
 import ManageCatagery from './ManageCategory'
 import ManageContact from './ManageContact'
 
+
 function AdminBoard() {
   return (
     <div>
