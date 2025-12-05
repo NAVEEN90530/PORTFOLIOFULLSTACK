@@ -2,50 +2,77 @@ import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav
+      className="navbar navbar-expand-lg"
+      style={{
+        backgroundColor: "var(--rich-black)",
+        borderBottom: "1px solid var(--primary-gold)",
+      }}
+    >
       <div className="container">
-        <Link className="navbar-brand" to="/">My Portfolio</Link>
 
+        {/* Brand */}
+        <Link
+          className="navbar-brand"
+          to="/"
+          style={{
+            color: "var(--primary-gold)",
+            fontWeight: "600",
+            letterSpacing: "0.5px",
+          }}
+        >
+          My Portfolio
+        </Link>
+
+        {/* Toggle Button */}
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navMenu"
+          style={{ borderColor: "var(--primary-gold)" }}
         >
-          <span className="navbar-toggler-icon"></span>
+          <span
+            className="navbar-toggler-icon"
+            style={{
+              filter: "invert(80%) sepia(90%) saturate(300%)",
+            }}
+          ></span>
         </button>
 
+        {/* Menu */}
         <div className="collapse navbar-collapse" id="navMenu">
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/">Home</NavLink>
-            </li>
 
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/about">About</NavLink>
-            </li>
+            {[
+              ["Home", "/"],
+              ["About", "/about"],
+              ["Our Services", "/services"],
+              ["Projects", "/projects"],
+              ["Process", "/process"],
+              ["Contact", "/touch"],
+              ["Admin", "/admin/login"],
+            ].map(([label, path]) => (
+              <li className="nav-item" key={path}>
+                <NavLink
+                  className="nav-link px-3"
+                  to={path}
+                  style={({ isActive }) => ({
+                    color: isActive
+                      ? "var(--button-gold)"
+                      : "var(--text-light)",
+                    fontWeight: isActive ? "600" : "400",
+                    transition: "0.3s",
+                  })}
+                >
+                  {label}
+                </NavLink>
+              </li>
+            ))}
 
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/services">Services</NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/projects">Projects</NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/testimonials">Testimonials</NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/touch">Contact</NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/admin/login">Admin</NavLink>
-            </li>
           </ul>
         </div>
+
       </div>
     </nav>
   );

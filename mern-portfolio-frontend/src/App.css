@@ -1,39 +1,265 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* ===============================
+   THEME VARIABLES
+================================ */
+:root {
+  --rich-black: #0A0A0A;
+
+  --primary-gold: #D4AF37;   /* accents, icons, highlights */
+  --button-gold: #FFD700;    /* CTA, hover */
+
+  --text-light: #EDEDED;     /* readable text */
+
+  --card-bg: #111111;        /* subtle dark for cards */
+  --card-hover-shadow: rgba(255, 215, 0, 0.8); /* gold glow */
+
+  --transition-smooth: 0.3s ease;
+  --radius-md: 12px;
+}
+
+/* ===============================
+   BASE STYLES
+================================ */
+body {
+  background-color: var(--rich-black);
+  font-family: "Poppins", sans-serif;
+  color: var(--text-light);
+}
+
+.page-container {
+  padding: 60px 0;
+}
+
+/* ===============================
+   NAVBAR
+================================ */
+.navbar {
+  background: var(--rich-black) !important;
+  border-bottom: 1px solid var(--primary-gold);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--primary-gold) !important;
+}
+
+.navbar-brand:hover {
+  color: var(--button-gold) !important;
+  transition: var(--transition-smooth);
+}
+
+.nav-link {
+  color: var(--text-light) !important;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+}
+
+.nav-link:hover {
+  color: var(--primary-gold) !important;
+  transform: translateY(-2px);
+}
+
+/* Navbar toggler button */
+.navbar-toggler {
+  border: 1px solid var(--primary-gold) !important;
+  transition: var(--transition-smooth);
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Golden hamburger icon */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,215,0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Mobile toggle smooth animation */
+.navbar-collapse {
+  transition: var(--transition-smooth);
+}
+
+/* ===============================
+   CARDS
+================================ */
+.card {
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  border: 1px solid var(--primary-gold);
+  transition: var(--transition-smooth);
+}
+
+.card img {
+  height: 400px;
+  object-fit: contain;
+}
+
+.card:hover {
+  box-shadow: 0 4px 15px var(--card-hover-shadow);
+  transform: scale(1.05);
+  border-color: var(--button-gold);
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.btn-gold {
+  background-color: var(--primary-gold);
+  color: var(--rich-black);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.btn-gold:hover {
+  background-color: var(--button-gold);
+  color: var(--rich-black);
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   STATS SECTION
+================================ */
+.stat-box {
   text-align: center;
+  transition: var(--transition-smooth);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.stat-box:hover {
+  transform: scale(1.05);
+  color: var(--primary-gold);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ===============================
+   FOOTER
+================================ */
+.footer {
+  background: var(--rich-black);
+  padding: 20px 0;
+  text-align: center;
+  color: var(--text-light);
+  margin-top: 40px;
+  border-top: 1px solid var(--primary-gold);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+footer p {
+  transition: var(--transition-smooth);
 }
 
+footer p:hover {
+  color: var(--button-gold);
+}
 
-.read-the-docs {
-  color: #888;
+/* ===============================
+   TEXT EFFECTS
+================================ */
+h2:hover {
+  color: var(--button-gold);
+  transition: var(--transition-smooth);
+}
+
+p {
+  transition: var(--transition-smooth);
+}
+
+p:hover {
+  opacity: 1;
+}
+
+/* Remove bullet points */
+li {
+  list-style-type: none;
+}
+/* ===== BLACK & GOLD THEME BUTTONS ===== */
+
+.nav-btn {
+  padding: 0.8rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+}
+
+/* Outline Button */
+.nav-btn-outline {
+  border: 2px solid #FFD700;
+  color: #FFD700;
+}
+
+.nav-btn-outline:hover {
+  background-color: #FFD700;
+  color: #000;
+  box-shadow: 0 0 15px #ffd700aa;
+}
+
+/* Filled Button */
+.nav-btn-filled {
+  background-color: #FFD700;
+  color: #000;
+}
+
+.nav-btn-filled:hover {
+  background-color: transparent;
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  box-shadow: 0 0 15px #ffd700aa;
+  transform: translateY(-3px);
+}
+
+/* ---------- INSIGHTS CARDS ---------- */
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.insight-card {
+  background: #111;
+  border: 1px solid #333;
+  padding: 1.8rem;
+  border-radius: 12px;
+  color: #EDEDED;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.insight-card:hover {
+  transform: translateY(-10px);
+  border-color: #FFD700;
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25);
+}
+
+/* ICON */
+.insight-icon {
+  font-size: 2.2rem;
+  color: #FFD700;
+  margin-bottom: 1rem;
+}
+
+/* TITLE */
+.insight-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* HOVER DESCRIPTION (hidden) */
+.insight-desc {
+  opacity: 0;
+  margin-top: 1rem;
+  color: #cfcfcf;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition: opacity 0.4s ease;
+}
+
+/* SHOW ON HOVER */
+.insight-card:hover .insight-desc {
+  opacity: 1;
 }

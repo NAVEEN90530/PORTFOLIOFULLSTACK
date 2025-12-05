@@ -3,7 +3,7 @@ import Category from "../models/Category.js";
 
 // Create Project (Admin)
 export const createProject = async (req, res) => {
-  const { name, description, category, imageUrl, taglines } = req.body;
+  const { name, description, category, imageUrl, taglines, badge } = req.body;
 
   if (!name || !description || !category || !imageUrl || !taglines)
     return res.status(400).json({ message: "All fields required" });
@@ -17,7 +17,8 @@ export const createProject = async (req, res) => {
     description,
     category,
     imageUrl,
-    taglines
+    taglines,
+    badge: badge ?? false  // 👈 default false if not sent
   });
 
   res.status(201).json({ message: "Project created", project });
@@ -38,7 +39,14 @@ export const getProjectById = async (req, res) => {
 
 // Update Project (Admin)
 export const updateProject = async (req, res) => {
-  const updated = await Project.findByIdAndUpdate(req.params.id, req.body, {
+  const updateData = { ...req.body };
+
+  // If badge is not sent → do not overwrite
+  if (updateData.badge === undefined) {
+    delete updateData.badge;
+  }
+
+  const updated = await Project.findByIdAndUpdate(req.params.id, updateData, {
     new: true
   });
 

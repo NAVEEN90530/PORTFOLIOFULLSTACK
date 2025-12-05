@@ -11,15 +11,15 @@ import ManageLinks from "../pages/admin/ManageLinks";
 import ManageProjects from "../pages/admin/ManageProjects";
 import ManageStats from "../pages/admin/ManageStats";
 import ManageTestimonials from "../pages/admin/ManageTestimonials";
-import Contact from "../pages/Contact";
 import Home from "../pages/Home";
 import Projects from "../pages/Projects";
 import Services from "../pages/Services";
-import Testimonials from "../pages/Testimonials";
 import PrivateRoute from "../routes/PrivateRoute";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import NotFound from "../pages/NotFound";
+import Process, { DesignStages } from "../pages/Process";
+import Contact from "../pages/Contact";
 
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/process" element={<Process />} />
         <Route path="/touch" element={<Contact />} />
 
         {/* Admin */}
