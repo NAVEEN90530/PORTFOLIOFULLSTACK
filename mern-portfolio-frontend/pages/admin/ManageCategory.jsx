@@ -8,6 +8,10 @@ import {
 } from "../../api/category";
 import { listDomains } from "../../api/domain";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Modal, Button } from "react-bootstrap";
 
 const ManageCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -23,6 +27,9 @@ const ManageCategory = () => {
 
   const [filterDomain, setFilterDomain] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   useEffect(() => {
     fetchDomains();
@@ -43,8 +50,8 @@ const ManageCategory = () => {
       const data = domainId
         ? await listDomainCategories(domainId)
         : await listCategories();
-      setCategories(data);
 
+      setCategories(data);
       const names = data.map((c) => ({ _id: c._id, name: c.name }));
       setCategoryOptions(names);
     } catch {
@@ -55,6 +62,19 @@ const ManageCategory = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    const validTypes = ["image/jpeg", "image/png"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!validTypes.includes(file.type)) {
+      toast.error("Only JPEG and PNG images are allowed.");
+      return;
+    }
+
+    if (file.size > maxSize) {
+      toast.error("File size should not exceed 5MB.");
+      return;
+    }
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -94,6 +114,7 @@ const ManageCategory = () => {
     setDescription("");
     setPreview("");
     setEditingId(null);
+    setFilterCategory(""); // Reset category filter
   };
 
   const handleEdit = (cat) => {
@@ -105,14 +126,20 @@ const ManageCategory = () => {
     setPreview(cat.imageUrl);
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this category?")) return;
+  const handleDelete = (id) => {
+    setCategoryToDelete(id);
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      await deleteCategory(id);
+      await deleteCategory(categoryToDelete);
       toast.success("Category deleted");
       fetchCategories(filterDomain);
     } catch {
       toast.error("Failed to delete category");
+    } finally {
+      setShowModal(false);
     }
   };
 
@@ -136,26 +163,26 @@ const ManageCategory = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Manage Categories</h2>
+    <div className="container my-4" style={{ minHeight: "100vh", backgroundColor: "#111111" }}>
+      <h2 className="mb-4 text-center fw-bold dashboard-title">Manage Categories</h2>
 
-      {/* FORM */}
-      <form onSubmit={handleSubmit} className="card p-3 mb-4">
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="card p-4 mb-4 shadow-sm" style={{ backgroundColor: "#111111", borderRadius: "12px" }}>
         <div className="row g-3">
           <div className="col-md-4">
-            <label>Category Name</label>
+            <label className="form-label text-light">Category Name</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-dark text-light border-0"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
 
           <div className="col-md-4">
-            <label>Domain</label>
+            <label className="form-label text-light">Domain</label>
             <select
-              className="form-control"
+              className="form-control bg-dark text-light border-0"
               value={domain}
               onChange={(e) => setDomain(e.target.value)}
             >
@@ -169,19 +196,19 @@ const ManageCategory = () => {
           </div>
 
           <div className="col-md-4">
-            <label>Image</label>
+            <label className="form-label text-light">Image</label>
             <input
               type="file"
               accept="image/*"
-              className="form-control"
+              className="form-control bg-dark text-light border-0"
               onChange={handleImageChange}
             />
           </div>
 
-          <div className="col-md-12">
-            <label>Description</label>
+          <div className="col-12">
+            <label className="form-label text-light">Description</label>
             <textarea
-              className="form-control"
+              className="form-control bg-dark text-light border-0"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -189,36 +216,53 @@ const ManageCategory = () => {
         </div>
 
         {preview && (
-          <img
-            src={preview}
-            alt="preview"
-            className="mt-3"
-            style={{ width: 120, borderRadius: 8 }}
-          />
+          <div
+            className="mt-2"
+            style={{
+              width: 120,
+              height: 120,
+              overflow: "hidden",
+              borderRadius: 12,
+              display: "inline-block",
+            }}
+          >
+            <img src={preview} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
         )}
 
-        <button className="btn btn-dark mt-3">
-          {editingId ? "Update Category" : "Add Category"}
+        {/* Button with Icons */}
+        <button
+          type="submit"
+          className="btn btn-gold mt-3"
+          style={{ width: "150px", padding: "10px", borderRadius: "8px" }}
+        >
+          <FontAwesomeIcon icon={editingId ? faSave : faPlus} className="me-2" />
+          {editingId ? "Update" : "Add"}
         </button>
         {editingId && (
           <button
             type="button"
-            className="btn btn-secondary w-100 mt-2"
+            className="btn btn-secondary mt-3 ms-2"
             onClick={resetForm}
+            style={{ width: "120px", padding: "10px", borderRadius: "8px" }}
           >
+            <FontAwesomeIcon icon={faTimes} className="me-2" />
             Cancel
           </button>
         )}
       </form>
 
-      {/* FILTERS */}
+      <div className="gold-line"></div>
+
+      {/* Filters */}
       <div className="row mb-3">
-        <div className="col-md-3">
-          <label>Filter by Domain:</label>
+        <div className="col-md-3 mb-2">
+          <label className="form-label text-light">Filter by Domain:</label>
           <select
-            className="form-control"
+            className="form-control bg-dark text-light border-0"
             value={filterDomain}
             onChange={handleFilterDomainChange}
+            style={{ padding: "10px", borderRadius: "8px" }}
           >
             <option value="">All Domains</option>
             {domains.map((d) => (
@@ -229,12 +273,13 @@ const ManageCategory = () => {
           </select>
         </div>
 
-        <div className="col-md-3">
-          <label>Filter by Category:</label>
+        <div className="col-md-3 mb-2">
+          <label className="form-label text-light">Filter by Category:</label>
           <select
-            className="form-control"
+            className="form-control bg-dark text-light border-0"
             value={filterCategory}
             onChange={handleFilterCategoryChange}
+            style={{ padding: "10px", borderRadius: "8px" }}
           >
             <option value="">All Categories</option>
             {categoryOptions.map((c) => (
@@ -246,48 +291,84 @@ const ManageCategory = () => {
         </div>
       </div>
 
-      {/* CATEGORY LIST */}
-      <table className="table table-bordered">
-        <thead className="table-dark">
-          <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Domain</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((cat) => (
-            <tr key={cat._id}>
-              <td>
-                <img
-                  src={cat.imageUrl}
-                  alt={cat.name}
-                  style={{ width: 60, borderRadius: 6 }}
-                />
-              </td>
-              <td>{cat.name}</td>
-              <td>{cat.description}</td>
-              <td>{cat.domain?.name}</td>
-              <td>
-                <button
-                  className="btn btn-sm btn-warning me-2"
-                  onClick={() => handleEdit(cat)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDelete(cat._id)}
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="gold-line"></div>
+
+      {/* Category Table */}
+      <div className="table-responsive">
+        <table className="table table-dark table-striped align-middle">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Categories</th>
+              <th>Description</th>
+              <th>Domain</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {categories.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center">
+                  No categories found
+                </td>
+              </tr>
+            ) : (
+              categories.map((cat) => (
+                <tr key={cat._id}>
+                  <td>
+                    <img
+                      src={cat.imageUrl}
+                      alt={cat.name}
+                      style={{ width: 60, borderRadius: 6 }}
+                    />
+                  </td>
+                  <td>{cat.name}</td>
+                  <td>{cat.description}</td>
+                  <td>{cat.domain?.name}</td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-warning me-2 mb-2"
+                      onClick={() => handleEdit(cat)}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDelete(cat._id)}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Confirm Delete Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this category?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

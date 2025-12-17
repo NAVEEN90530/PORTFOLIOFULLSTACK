@@ -35,93 +35,6 @@ body {
 }
 
 /* ===============================
-   NAVBAR
-================================ */
-.navbar {
-  background: var(--rich-black) !important;
-  border-bottom: 1px solid var(--primary-gold);
-}
-
-.navbar-brand {
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--primary-gold) !important;
-}
-
-.navbar-brand:hover {
-  color: var(--button-gold) !important;
-  transition: var(--transition-smooth);
-}
-
-.nav-link {
-  color: var(--text-light) !important;
-  font-weight: 500;
-  transition: var(--transition-smooth);
-}
-
-/* Hover effect for links */
-.nav-link:hover {
-  color: var(--primary-gold) !important;
-  transform: translateY(-2px);
-}
-
-/* Navbar toggler button */
-.navbar-toggler {
-  border: 1px solid var(--primary-gold) !important;
-  transition: var(--transition-smooth);
-}
-
-.navbar-toggler:focus,
-.navbar-toggler:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Golden hamburger icon */
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,215,0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
-
-/* Mobile toggle smooth animation */
-.navbar-collapse {
-  transition: var(--transition-smooth);
-}
-
-/* Custom Navbar Link Styles */
-.goldactive {
-  color: #FFD700 !important;
-  /* Gold color for active link */
-  font-weight: 600 !important;
-  /* Bold font for active link */
-  transform: translateY(-2px);
-  /* Make it feel active even when clicked */
-}
-
-/* Light color for inactive links */
-.lightactive {
-  color: #EDEDED !important;
-  /* Light color for inactive link */
-  font-weight: 400 !important;
-  /* Regular font for inactive link */
-}
-
-/* Active link styles for NavLink */
-.nav-link.active {
-  color: #FFD700 !important;
-  font-weight: 600 !important;
-  transform: translateY(-2px);
-}
-
-/* Hover effect for all nav links */
-.nav-link:hover {
-  background-color: rgba(255, 215, 0, 0.1);
-  /* Light gold background on hover */
-  border-radius: 5px;
-  transition: background-color 0.3s ease-in-out;
-}
-
-
-/* ===============================
    CARDS
 ================================ */
 .card {
@@ -159,19 +72,6 @@ body {
   background-color: var(--button-gold);
   color: var(--rich-black);
   transform: translateY(-2px);
-}
-
-/* ===============================
-   STATS SECTION
-================================ */
-.stat-box {
-  text-align: center;
-  transition: var(--transition-smooth);
-}
-
-.stat-box:hover {
-  transform: scale(1.05);
-  color: var(--primary-gold);
 }
 
 
@@ -262,10 +162,7 @@ body {
 /* ===============================
    TEXT EFFECTS
 ================================ */
-h2:hover {
-  color: var(--button-gold);
-  transition: var(--transition-smooth);
-}
+
 
 p {
   transition: var(--transition-smooth);

@@ -64,6 +64,7 @@ export const listCategories = async (req, res) => {
   }
 };
 
+
 /**
  * ============================
  * GET SINGLE CATEGORY

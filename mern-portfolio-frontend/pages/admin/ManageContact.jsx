@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../../api/api.js";
 import { toast } from "react-toastify";
+import "font-awesome/css/font-awesome.min.css"; // Importing FontAwesome icons
 
 export default function ManageContact() {
   const [contact, setContact] = useState({
@@ -15,130 +16,177 @@ export default function ManageContact() {
     address: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [error, setError] = useState(""); // Error state
+
   // Load contact info
-  const loadContact = () => {
-    API.get("/settings").then((res) => {
-      if (res.data && res.data.contact) {
+  const loadContact = async () => {
+    setIsLoading(true);
+    try {
+      const res = await API.get("/settings");
+      if (res.data?.contact) {
         setContact(res.data.contact);
         setForm(res.data.contact);
       }
-    });
+    } catch (err) {
+      setError("Failed to load contact information.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     loadContact();
   }, []);
 
+  // Validate form before submitting
+  const validateForm = () => {
+    const { email, phone, address } = form;
+
+    // Email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!email || !emailRegex.test(email)) {
+      toast.error("Please enter a valid email address!");
+      return false;
+    }
+
+    // Phone validation (basic check)
+    const phoneRegex = /^[0-9+\-() ]{7,20}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+      toast.error("Please enter a valid phone number!");
+      return false;
+    }
+
+    // Address validation
+    if (!address) {
+      toast.error("Address is required!");
+      return false;
+    }
+
+    return true;
+  };
+
   // Update contact info
   const updateContact = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) return; // Only proceed if validation passes
+
+    setIsLoading(true);
+    setError(""); // Reset error
+
     try {
       await API.put("/settings/contact", form);
-      setContact(form); // update UI
+      setContact(form); // Update UI
 
       toast.success("Contact information updated successfully!");
     } catch (err) {
       console.error("Failed to update contact:", err);
+      setError("Failed to update contact information.");
       toast.error("Failed to update contact!");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  // Handle form field changes dynamically
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   };
 
   return (
     <div className="container py-4" style={{ maxWidth: "700px" }}>
-      <h2 className="text-center mb-4" style={{ color: "var(--button-gold)" }}>
+      <h2 className="text-center mb-4" >
+        <i className="fas fa-address-book" style={{ marginRight: "10px" }}></i>
         Manage Contact Information
       </h2>
 
       {/* FORM */}
-      <div
-        className="card shadow p-4"
-        style={{
-          backgroundColor: "var(--rich-black)",
-          color: "var(--text-light)",
-          border: "1px solid var(--primary-gold)",
-          borderRadius: "10px",
-        }}
-      >
+      <div className="card shadow p-4 card-container">
         <form onSubmit={updateContact}>
           {/* Email */}
           <div className="mb-3">
-            <label className="form-label" style={{ color: "var(--button-gold)" }}>
+            <label className="form-label" style={{ color: "#fff" }}>
+              <i className="fas fa-envelope" style={{ marginRight: "8px" }}></i>
               Email
             </label>
             <input
-              className="form-control"
+              name="email"
+              className="form-control bg-dark text-light border-0"
               placeholder="Enter email"
               value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              style={{
-                backgroundColor: "#1A1A1A",
-                color: "#EDEDED",
-                borderColor: "var(--primary-gold)",
-              }}
+              onChange={handleInputChange}
+              aria-label="Email Address"
             />
           </div>
 
           {/* Phone */}
           <div className="mb-3">
-            <label className="form-label" style={{ color: "var(--button-gold)" }}>
+            <label className="form-label" style={{ color: "#fff" }}>
+              <i className="fas fa-phone-alt" style={{ marginRight: "8px" }}></i>
               Phone
             </label>
             <input
-              className="form-control"
+              name="phone"
+              className="form-control bg-dark text-light border-0"
               placeholder="Enter phone"
               value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              style={{
-                backgroundColor: "#1A1A1A",
-                color: "#EDEDED",
-                borderColor: "var(--primary-gold)",
-              }}
+              onChange={handleInputChange}
+              aria-label="Phone Number"
             />
           </div>
 
           {/* Address */}
           <div className="mb-3">
-            <label className="form-label" style={{ color: "var(--button-gold)" }}>
+            <label className="form-label" style={{ color: "#fff" }}>
+              <i className="fas fa-map-marker-alt" style={{ marginRight: "8px" }}></i>
               Address
             </label>
             <input
-              className="form-control"
+              name="address"
+              className="form-control bg-dark text-light border-0"
               placeholder="Enter address"
               value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-              style={{
-                backgroundColor: "#1A1A1A",
-                color: "#EDEDED",
-                borderColor: "var(--primary-gold)",
-              }}
+              onChange={handleInputChange}
+              aria-label="Address"
             />
           </div>
 
+          {/* Submit Button */}
           <button
+            type="submit"
             className="btn w-100 mt-2"
             style={{
-              backgroundColor: "var(--button-gold)",
-              color: "var(--rich-black)",
+              backgroundColor: "#FFD700",
+              color: "#111111",
               fontWeight: 600,
             }}
+            disabled={isLoading}
           >
-            Save Changes
+            {isLoading ? (
+              <i className="fas fa-spinner fa-spin"> </i>
+            ) : (
+              <i className="fas fa-save"></i>
+            )}
+            {isLoading ? " Saving..." : " Save Changes"}
           </button>
         </form>
+
+        {/* Error Display */}
+        {error && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {error}
+          </div>
+        )}
       </div>
 
       {/* LIVE DISPLAY */}
-      <div
-        className="mt-4 p-3"
-        style={{
-          backgroundColor: "#111",
-          borderRadius: "10px",
-          border: "1px solid var(--primary-gold)",
-          color: "var(--text-light)",
-        }}
-      >
-        <h4 style={{ color: "var(--button-gold)" }}>Current Contact Info</h4>
+      <div className="mt-4 p-3" style={{ backgroundColor: "#111", borderRadius: "10px", border: "1px solid #FFD700", color: "#EDEDED" }}>
+        <h4 style={{ color: "#FFD700" }}>Current Contact Info</h4>
         <p><strong>Email:</strong> {contact.email}</p>
         <p><strong>Phone:</strong> {contact.phone}</p>
         <p><strong>Address:</strong> {contact.address}</p>

@@ -1,7 +1,5 @@
 import { NavLink } from "react-router-dom";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import BootstrapNavbar from "react-bootstrap/Navbar";
+import { Navbar, Nav, Container } from "react-bootstrap";
 
 const AppNavbar = () => {
   const links = [
@@ -10,68 +8,81 @@ const AppNavbar = () => {
     ["Our Services", "/services"],
     ["Projects", "/projects"],
     ["Process", "/process"],
-    ["Contact", "/touch"],
+    ["Contact", "/get-in-touch"],
     ["Admin", "/admin/login"],
   ];
 
+  // Inline styles
+  const linkStyle = {
+    padding: "0.5rem 1rem",
+    fontSize: "1rem",
+    textTransform: "capitalize",
+    textDecoration: "none",
+    color: "#EDEDED",
+    fontWeight: 500,
+    borderRadius: "5px",
+    transition: "0.3s ease",
+  };
+
+  const activeLinkStyle = {
+    color: "#FFD700",
+    fontWeight: 600,
+     backgroundColor: "rgba(255, 215, 0, 0.1)",
+    transform: "translateY(-1px)",
+  };
+
+  const brandStyle = {
+    color: "#D4AF37",
+    fontWeight: 600,
+    letterSpacing: "0.5px",
+    fontSize: "1.3rem",
+    textTransform: "uppercase",
+  };
+
   return (
-    <BootstrapNavbar
+    <Navbar
       expand="lg"
       sticky="top"
       style={{
-        backgroundColor: "var(--rich-black)",
-        borderBottom: "1px solid var(--primary-gold)",
+        backgroundColor: "#0A0A0A", // var(--rich-black)
+        borderBottom: "1px solid #D4AF37", // var(--primary-gold)
+        zIndex: 1050,
       }}
     >
       <Container>
         {/* Brand */}
-        <BootstrapNavbar.Brand
-          as={NavLink}
-          to="/"
-          style={{
-            color: "var(--primary-gold)",
-            fontWeight: "600",
-            letterSpacing: "0.5px",
-            fontSize: "1.3rem",
-            textTransform: "uppercase",
-          }}
-        >
+        <Navbar.Brand as={NavLink} to="/" style={brandStyle}>
           My Portfolio
-        </BootstrapNavbar.Brand>
+        </Navbar.Brand>
 
         {/* Toggle Button */}
-        <BootstrapNavbar.Toggle
+        <Navbar.Toggle
           aria-controls="navbar-nav"
-          style={{ borderColor: "var(--primary-gold)" }}
+          style={{
+            borderColor: "#D4AF37",
+          }}
         />
 
         {/* Menu */}
-        <BootstrapNavbar.Collapse id="navbar-nav">
-          <Nav className="ms-auto">
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="ms-auto align-items-center">
             {links.map(([label, path]) => (
-              <Nav.Link
+              <NavLink
                 key={path}
-                as={NavLink}
                 to={path}
-                // Use a function to handle the dynamic className for active and inactive states
-                className={({ isActive }) =>
+                style={({ isActive }) =>
                   isActive
-                    ? "goldactive" // Active link: gold color
-                    : "lightactive" // Inactive link: light color
+                    ? { ...linkStyle, ...activeLinkStyle }
+                    : linkStyle
                 }
-                style={{
-                  padding: "0.5rem 1rem",
-                  fontSize: "1rem",
-                  textTransform: "capitalize",
-                }}
               >
                 {label}
-              </Nav.Link>
+              </NavLink>
             ))}
           </Nav>
-        </BootstrapNavbar.Collapse>
+        </Navbar.Collapse>
       </Container>
-    </BootstrapNavbar>
+    </Navbar>
   );
 };
 

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 // Social media icons
 import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6"
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function ManageLinks() {
   const [links, setLinks] = useState({
@@ -62,23 +62,23 @@ export default function ManageLinks() {
   return (
     <div className="container py-4" style={{ maxWidth: "800px" }}>
       {/* Form Section */}
-      <h2 className="text-center mb-4" style={{ color: "var(--button-gold)" }}>
+      <h2 className="text-center mb-4">
         Manage Social Links
       </h2>
 
       <div
         className="card p-4 shadow mb-4"
         style={{
-          backgroundColor: "var(--rich-black)",
-          color: "var(--text-light)",
-          border: "1px solid var(--primary-gold)",
+          backgroundColor: "#111111",
+          color: "#EDEDED",
+          border: "1px solid #FFD700",
           borderRadius: "10px",
         }}
       >
         <form className="row g-3" onSubmit={handleSubmit}>
           {fields.map(({ key, placeholder, icon }) => (
-            <div className="col-md-6 d-flex align-items-center" key={key} style={{ gap: "10px" }}>
-              <div style={{ color: "var(--button-gold)" }}>{icon}</div>
+            <div className="col-md-6 d-flex align-items-center" key={key} style={{ gap: "15px" }}>
+              <div style={{ color: "#FFD700" }}>{icon}</div>
               <input
                 type="text"
                 name={key}
@@ -89,7 +89,9 @@ export default function ManageLinks() {
                 style={{
                   backgroundColor: "#1A1A1A",
                   color: "#EDEDED",
-                  border: "1px solid var(--primary-gold)",
+                  border: "1px solid #FFD700",
+                  padding: "12px",
+                  borderRadius: "8px",
                 }}
               />
             </div>
@@ -101,10 +103,13 @@ export default function ManageLinks() {
               className="btn w-100"
               disabled={loading}
               style={{
-                backgroundColor: "var(--button-gold)",
-                color: "var(--rich-black)",
+                backgroundColor: "#FFD700",
+                color: "#111111",
                 fontWeight: 600,
+                padding: "12px",
+                borderRadius: "8px",
                 transition: "0.3s ease",
+                border: "none",
               }}
             >
               {loading ? "Updating..." : "Update Links"}
@@ -114,54 +119,61 @@ export default function ManageLinks() {
       </div>
 
       {/* Preview Section */}
-      <h4 style={{ color: "var(--button-gold)", marginBottom: "10px" }}>Preview Links</h4>
-      <div className="social-links" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-  {links.facebook && (
-    <div>
-      <strong>Facebook:</strong>{" "}
-      <a href={links.facebook} target="_blank" rel="noopener noreferrer">
-        {links.facebook}
-      </a>
-    </div>
-  )}
+      <h4 style={{ color: "#FFD700", marginBottom: "12px" }}>Preview Links</h4>
+      <div
+        className="social-links"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          color: "#EDEDED",
+        }}
+      >
+        {links.facebook && (
+          <div>
+            <strong>Facebook:</strong>{" "}
+            <a href={links.facebook} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+              {links.facebook}
+            </a>
+          </div>
+        )}
 
-  {links.twitter && (
-    <div>
-      <strong>Twitter:</strong>{" "}
-      <a href={links.twitter} target="_blank" rel="noopener noreferrer">
-        {links.twitter}
-      </a>
-    </div>
-  )}
+        {links.twitter && (
+          <div>
+            <strong>Twitter:</strong>{" "}
+            <a href={links.twitter} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+              {links.twitter}
+            </a>
+          </div>
+        )}
 
-  {links.instagram && (
-    <div>
-      <strong>Instagram:</strong>{" "}
-      <a href={links.instagram} target="_blank" rel="noopener noreferrer">
-        {links.instagram}
-      </a>
-    </div>
-  )}
+        {links.instagram && (
+          <div>
+            <strong>Instagram:</strong>{" "}
+            <a href={links.instagram} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+              {links.instagram}
+            </a>
+          </div>
+        )}
 
-  {links.linkedin && (
-    <div>
-      <strong>LinkedIn:</strong>{" "}
-      <a href={links.linkedin} target="_blank" rel="noopener noreferrer">
-        {links.linkedin}
-      </a>
-    </div>
-  )}
+        {links.linkedin && (
+          <div>
+            <strong>LinkedIn:</strong>{" "}
+            <a href={links.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+              {links.linkedin}
+            </a>
+          </div>
+        )}
 
-  {links.github && (
-    <div>
-      <strong>GitHub:</strong>{" "}
-      <a href={links.github} target="_blank" rel="noopener noreferrer">
-        {links.github}
-      </a>
-    </div>
-  )}
-</div>
-
+        {links.github && (
+          <div>
+            <strong>GitHub:</strong>{" "}
+            <a href={links.github} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+              {links.github}
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

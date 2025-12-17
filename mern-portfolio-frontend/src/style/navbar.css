@@ -1,0 +1,21 @@
+.nav-link {
+  color: var(--text-light) !important;
+  font-weight: 500;
+  margin: 0 0.25rem;
+  transition: var(--transition-smooth);
+}
+
+.nav-link:hover {
+  color: var(--button-gold) !important;
+  transform: translateY(-2px);
+}
+
+.goldactive {
+  color: var(--button-gold) !important;
+  font-weight: 600 !important;
+}
+
+.lightactive {
+  color: var(--text-light) !important;
+  font-weight: 400 !important;
+}

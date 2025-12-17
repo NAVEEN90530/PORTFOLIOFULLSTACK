@@ -1,19 +1,29 @@
 import { useEffect, useState } from "react";
 import API from "../../api/api.js";
 import { toast } from "react-toastify";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import { FaSmile, FaTasks, FaCogs } from "react-icons/fa";
+
+const COLORS = {
+  background: "#111",
+  text: "#EDEDED",
+  highlight: "#FFD700",
+};
 
 export default function ManageStats() {
   const [stats, setStats] = useState({
     happyCustomers: "",
     projectsCompleted: "",
-    projectTechnologies: ""
+    projectTechnologies: "",
   });
 
   const [statsget, setStatsget] = useState({
     happyCustomers: "",
     projectsCompleted: "",
-    projectTechnologies: ""
+    projectTechnologies: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   // Load stats once
   const loadStats = () => {
@@ -34,105 +44,123 @@ export default function ManageStats() {
 
   const updateStats = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const { happyCustomers, projectsCompleted, projectTechnologies } = stats;
+
+    if (!happyCustomers || !projectsCompleted || !projectTechnologies) {
+      toast.error("All fields are required!");
+      setLoading(false);
+      return;
+    }
 
     try {
       await API.put("/settings/stats", stats);
-
       toast.success("Stats updated successfully!");
-
-      loadStats(); // refresh display
-
-      // clear input fields
-      setStats({
-        happyCustomers: "",
-        projectsCompleted: "",
-        projectTechnologies: ""
-      });
+      loadStats();
+      setStats({ happyCustomers: "", projectsCompleted: "", projectTechnologies: "" });
     } catch (error) {
       console.error("Failed to update stats:", error);
       toast.error("Failed to update stats!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-4 text-center fw-bold">Manage Stats</h2>
+    <Container className="py-4" style={{ minHeight: "100vh", backgroundColor: COLORS.background }}>
+      <h2 className="mb-4 text-center fw-bold dashboard-title">Manage Stats</h2>
 
       {/* Form Section */}
-      <form className="container" onSubmit={updateStats}>
+      <form className="card p-4 mb-4 shadow-sm" style={{ backgroundColor: COLORS.background, borderRadius: "12px" }} onSubmit={updateStats}>
         <div className="row g-4">
           <div className="col-md-4">
-            <label className="form-label">Happy Customers</label>
+            <label className="form-label text-light">Happy Customers</label>
             <input
               type="number"
-              className="form-control form-control-lg"
+              className="form-control bg-dark text-light border-0"
               placeholder="Happy Customers"
               value={stats.happyCustomers}
-              onChange={(e) =>
-                setStats({ ...stats, happyCustomers: e.target.value })
-              }
+              onChange={(e) => setStats({ ...stats, happyCustomers: e.target.value })}
+              style={{ backgroundColor: COLORS.background, color: COLORS.text, borderColor: COLORS.highlight }}
             />
           </div>
 
           <div className="col-md-4">
-            <label className="form-label">Projects Completed</label>
+            <label className="form-label" style={{ color: COLORS.highlight }}>Projects Completed</label>
             <input
               type="number"
-              className="form-control form-control-lg"
+              className="form-control form-control-lg shadow-sm rounded-3"
               placeholder="Projects Completed"
               value={stats.projectsCompleted}
-              onChange={(e) =>
-                setStats({ ...stats, projectsCompleted: e.target.value })
-              }
+              onChange={(e) => setStats({ ...stats, projectsCompleted: e.target.value })}
+              style={{ backgroundColor: COLORS.background, color: COLORS.text, borderColor: COLORS.highlight }}
             />
           </div>
 
           <div className="col-md-4">
-            <label className="form-label">Project Technologies</label>
+            <label className="form-label" style={{ color: COLORS.highlight }}>Project Technologies</label>
             <input
               type="text"
-              className="form-control form-control-lg"
+              className="form-control form-control-lg shadow-sm rounded-3"
               placeholder="Project Technologies"
               value={stats.projectTechnologies}
-              onChange={(e) =>
-                setStats({ ...stats, projectTechnologies: e.target.value })
-              }
+              onChange={(e) => setStats({ ...stats, projectTechnologies: e.target.value })}
+              style={{ backgroundColor: COLORS.background, color: COLORS.text, borderColor: COLORS.highlight }}
             />
           </div>
 
-          <div className="col-12">
-            <button type="submit" className="btn btn-primary btn-lg w-100 mt-2">
-              Save Stats
+          <div className="col-12 text-center">
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg w-50 mt-4 rounded-pill shadow-lg"
+              style={{ backgroundColor: COLORS.highlight, color: "#111", fontWeight: 600 }}
+              disabled={loading || !stats.happyCustomers || !stats.projectsCompleted || !stats.projectTechnologies}
+            >
+              {loading ? (
+                <span className="spinner-border spinner-border-sm"></span>
+              ) : (
+                "Save Stats"
+              )}
             </button>
           </div>
         </div>
       </form>
 
-      <hr className="my-5" />
+      <hr className="my-5" style={{ borderColor: COLORS.highlight }} />
 
-      {/* Display Stats */}
-      <div className="row g-4">
-        <div className="col-md-4">
-          <div className="card shadow-sm p-4 text-center">
-            <h3 className="fw-bold text-primary">{statsget.happyCustomers} +</h3>
-            <p className="mb-0 fs-5">Happy Customers</p>
-          </div>
-        </div>
+      {/* Category Cards Section */}
+      <Row className="g-4">
+        <Col md={4}>
+          <Card className="category-card border" style={{ borderColor: COLORS.highlight, backgroundColor: COLORS.background, color: COLORS.text }}>
+            <Card.Body className="text-center">
+              <FaSmile size={40} className="mb-3" style={{ color: COLORS.highlight }} />
+              <h3 className="fw-bold" style={{ color: COLORS.highlight }}>{statsget.happyCustomers} +</h3>
+              <p className="fs-5 text-muted">Happy Customers</p>
+            </Card.Body>
+          </Card>
+        </Col>
 
-        <div className="col-md-4">
-          <div className="card shadow-sm p-4 text-center">
-            <h3 className="fw-bold text-success">{statsget.projectsCompleted} +</h3>
-            <p className="mb-0 fs-5">Projects Completed</p>
-          </div>
-        </div>
+        <Col md={4}>
+          <Card className="category-card border" style={{ borderColor: COLORS.highlight, backgroundColor: COLORS.background, color: COLORS.text }}>
+            <Card.Body className="text-center">
+              <FaTasks size={40} className="mb-3" style={{ color: COLORS.highlight }} />
+              <h3 className="fw-bold" style={{ color: COLORS.highlight }}>{statsget.projectsCompleted} +</h3>
+              <p className="fs-5 text-muted">Projects Completed</p>
+            </Card.Body>
+          </Card>
+        </Col>
 
-        <div className="col-md-4">
-          <div className="card shadow-sm p-4 text-center">
-            <h3 className="fw-bold text-warning">{statsget.projectTechnologies} +</h3>
-            <p className="mb-0 fs-5">Project Technologies</p>
-          </div>
-        </div>
-      </div>
-    </div>
+        <Col md={4}>
+          <Card className="category-card border" style={{ borderColor: COLORS.highlight, backgroundColor: COLORS.background, color: COLORS.text }}>
+            <Card.Body className="text-center">
+              <FaCogs size={40} className="mb-3" style={{ color: COLORS.highlight }} />
+              <h3 className="fw-bold" style={{ color: COLORS.highlight }}>{statsget.projectTechnologies} +</h3>
+              <p className="fs-5 text-muted">Project Technologies</p>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }

@@ -51,9 +51,6 @@ export default function Insights() {
 
   return (
     <section className="container py-5">
-      <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
-        Our Latest Insights
-      </h2>
 
       {/* Cards */}
       <div className="insights-section m-5">

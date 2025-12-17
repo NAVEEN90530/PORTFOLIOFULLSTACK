@@ -147,7 +147,7 @@ export default function Home() {
         </div>
       </div>
 
-      <AuroxHowWeWork />
+      
       {/* ---------------- STATS SECTION ---------------- */}
       <div className="container py-5">
         {!loadingStats ? (

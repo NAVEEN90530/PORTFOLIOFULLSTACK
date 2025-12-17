@@ -140,3 +140,50 @@ export const deleteProject = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+/* =========================================================
+   LIST PROJECT (PUBLIC)
+========================================================= */
+
+export const listProjects = async (req, res) => {
+  try {
+    const { domain, category } = req.query;
+    const filter = {};
+
+    // DOMAIN FILTER (optional)
+    if (domain) {
+      const domainDoc = await Domain.findOne({ slug: domain });
+      if (!domainDoc) {
+        return res.status(404).json({ message: "Domain not found" });
+      }
+      filter.domain = domainDoc._id;
+    }
+
+    // CATEGORY FILTER (independent)
+    if (category) {
+      const categoryQuery = { slug: category };
+
+      // Only restrict category to domain if domain is provided
+      if (filter.domain) {
+        categoryQuery.domain = filter.domain;
+      }
+
+      const categoryDoc = await Category.findOne(categoryQuery);
+      if (!categoryDoc) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+
+      filter.category = categoryDoc._id;
+    }
+
+    const projects = await Project.find(filter)
+      .populate("domain", "name slug")
+      .populate("category", "name slug")
+      .sort({ createdAt: -1 });
+
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
