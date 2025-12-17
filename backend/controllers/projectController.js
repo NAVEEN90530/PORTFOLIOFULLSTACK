@@ -1,63 +1,142 @@
 import Project from "../models/Project.js";
 import Category from "../models/Category.js";
+import Domain from "../models/Domain.js";
 
-// Create Project (Admin)
+/* =========================================================
+   CREATE PROJECT (ADMIN)
+========================================================= */
 export const createProject = async (req, res) => {
-  const { name, description, category, imageUrl, taglines, badge } = req.body;
+  try {
+    const {
+      name,
+      description,
+      domain,
+      category,
+      imageUrl,
+      taglines,
+      badge,
+    } = req.body;
 
-  if (!name || !description || !category || !imageUrl || !taglines)
-    return res.status(400).json({ message: "All fields required" });
+    // Validation
+    if (!name || !description || !domain || !category || !imageUrl || !taglines) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-  const categoryExists = await Category.findById(category);
-  if (!categoryExists)
-    return res.status(400).json({ message: "Invalid category" });
+    // Check domain exists
+    const domainExists = await Domain.findById(domain);
+    if (!domainExists) {
+      return res.status(400).json({ message: "Invalid domain" });
+    }
 
-  const project = await Project.create({
-    name,
-    description,
-    category,
-    imageUrl,
-    taglines,
-    badge: badge ?? false  // 👈 default false if not sent
-  });
+    // Check category exists
+    const categoryExists = await Category.findById(category);
+    if (!categoryExists) {
+      return res.status(400).json({ message: "Invalid category" });
+    }
 
-  res.status(201).json({ message: "Project created", project });
-};
+    const project = await Project.create({
+      name,
+      description,
+      domain,
+      category,
+      imageUrl,
+      taglines,
+      badge: badge ?? false,
+    });
 
-// Get All Projects (Public)
-export const getProjects = async (req, res) => {
-  const projects = await Project.find().populate("category", "name");
-  res.status(200).json(projects);
-};
-
-// Get Single Project (Public)
-export const getProjectById = async (req, res) => {
-  const project = await Project.findById(req.params.id).populate("category");
-  if (!project) return res.status(404).json({ message: "Project not found" });
-  res.json(project);
-};
-
-// Update Project (Admin)
-export const updateProject = async (req, res) => {
-  const updateData = { ...req.body };
-
-  // If badge is not sent → do not overwrite
-  if (updateData.badge === undefined) {
-    delete updateData.badge;
+    res.status(201).json({
+      message: "Project created successfully",
+      project,
+    });
+  } catch (error) {
+    console.error("Create Project Error:", error);
+    res.status(500).json({ message: "Server error" });
   }
-
-  const updated = await Project.findByIdAndUpdate(req.params.id, updateData, {
-    new: true
-  });
-
-  if (!updated) return res.status(404).json({ message: "Project not found" });
-
-  res.json({ message: "Project updated", project: updated });
 };
 
-// Delete Project (Admin)
+/* =========================================================
+   GET ALL PROJECTS (PUBLIC)
+========================================================= */
+export const getProjects = async (req, res) => {
+  try {
+    const projects = await Project.find()
+      .populate("domain", "name slug")
+      .populate("category", "name slug")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(projects);
+  } catch (error) {
+    console.error("Get Projects Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+/* =========================================================
+   GET SINGLE PROJECT BY ID (PUBLIC)
+========================================================= */
+export const getProjectById = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id)
+      .populate("domain", "name slug")
+      .populate("category", "name slug");
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.json(project);
+  } catch (error) {
+    console.error("Get Project Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+/* =========================================================
+   UPDATE PROJECT (ADMIN)
+========================================================= */
+export const updateProject = async (req, res) => {
+  try {
+    const updateData = { ...req.body };
+
+    // Prevent accidental overwrite
+    if (updateData.badge === undefined) delete updateData.badge;
+
+    const updated = await Project.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    )
+      .populate("domain", "name slug")
+      .populate("category", "name slug");
+
+    if (!updated) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.json({
+      message: "Project updated successfully",
+      project: updated,
+    });
+  } catch (error) {
+    console.error("Update Project Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+/* =========================================================
+   DELETE PROJECT (ADMIN)
+========================================================= */
 export const deleteProject = async (req, res) => {
-  const removed = await Project.findByIdAndDelete(req.params.id);
-  if (!removed) return res.status(404).json({ message: "Project not found" });
-  res.json({ message: "Project deleted" });
+  try {
+    const removed = await Project.findByIdAndDelete(req.params.id);
+
+    if (!removed) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.json({ message: "Project deleted successfully" });
+  } catch (error) {
+    console.error("Delete Project Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

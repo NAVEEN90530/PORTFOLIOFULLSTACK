@@ -3,12 +3,16 @@ import CountUp from "react-countup";
 import API from "../api/api";
 import homebackground from "../src/assects/homebackground.jpeg";
 import { NavLink } from "react-router-dom";
+import { useSpring, animated } from '@react-spring/web';
 
 // Icons
 import { FiTool, FiSend, FiUsers, FiCheckCircle, FiCpu, FiStar } from "react-icons/fi";
 import ProjectModal from "../components/ProjectModal";  // Ensure correct import
 import Testimonials from "./Testimonials";
 import SendMessage from "./SendMessage";
+import Insights from "./Insights";
+import ScrollFade from "./scroll";
+import AuroxHowWeWork from "./WeWork";
 
 export default function Home() {
   const [projects, setProjects] = useState([]);
@@ -49,34 +53,51 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
+
       {/* ---------------- HERO SECTION ---------------- */}
       <div
         style={{
-          backgroundImage: `url(${homebackground})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          textAlign: "center",
-          color: "#FFD700",
+          position: "relative",
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           padding: "0 1rem",
+          textAlign: "center",
+          color: "#FFD700",
+          overflow: "hidden",
         }}
       >
+        {/* Background Image Layer */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundImage: `url(${homebackground})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: 0.1, // ✅ background opacity only
+            zIndex: 1,
+          }}
+        />
+
+        {/* Content */}
         <div style={{ maxWidth: "800px" }}>
           <h1
             style={{
-              // color: "#FFF",
+              fontFamily: "Castellar, serif",
               fontWeight: "700",
               fontSize: "5rem",
               marginBottom: "1rem",
               textShadow: "0 0 20px #000",
             }}
           >
-            Aurox Design Studio
+            Aurox
           </h1>
 
           <h2
@@ -85,7 +106,8 @@ export default function Home() {
               fontWeight: "600",
               fontSize: "1.5rem",
               textShadow: "0 0 10px #000",
-            }}>
+            }}
+          >
             Built to be made. Designed to perform.
           </h2>
 
@@ -125,6 +147,7 @@ export default function Home() {
         </div>
       </div>
 
+      <AuroxHowWeWork />
       {/* ---------------- STATS SECTION ---------------- */}
       <div className="container py-5">
         {!loadingStats ? (
@@ -170,112 +193,62 @@ export default function Home() {
       <div className="gold-line"></div>
 
       {/* ---------------- RECENT PROJECTS ---------------- */}
-      <div className="container">
-              <h2 className="section-heading text-center py-3" style={{ color: "#FFD700" }}>
-                Recent Projects
-              </h2>
-              {loadingProjects ? (
-                <p className="text-light">Loading projects...</p>
-              ) : badgeProjects.length === 0 ? (
-                <p className="no-projects">No projects available.</p>
-              ) : (
-                <div className="row">
-                  {badgeProjects.map((p) => (
-                    <div className="col-md-4 mb-4" key={p._id}>
-                      <div
-                        className="project-card"
-                        onClick={() => openProjectModal(p)}  // Open modal
-                        style={{ cursor: "pointer" }}
-                      >
-                        <div className="project-img-wrapper">
-                          <img
-                            src={p.imageUrl || "/path/to/default-image.jpg"}  // Fallback image
-                            className="project-img"
-                            alt={p.name || "Project Image"}
-                            onError={(e) => (e.target.src = "/path/to/default-image.jpg")}
-                          />
-                        </div>
-                        <div className="project-content">
-                          <h5 className="project-title">{p.name}</h5>
-                          <p className="project-desc">{p.description?.substring(0, 100)}...</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+      <div className="container bg-secondary">
+        <h2 className="section-heading text-center py-3" style={{ color: "#FFD700" }}>
+          Recent Projects
+        </h2>
+        {loadingProjects ? (
+          <p className="text-light">Loading projects...</p>
+        ) : badgeProjects.length === 0 ? (
+          <p className="no-projects">No projects available.</p>
+        ) : (
+          <div className="row">
+            {badgeProjects.map((p) => (
+              <div className="col-md-4 mb-4" key={p._id}>
+                <div
+                  className="project-card"
+                  onClick={() => openProjectModal(p)}  // Open modal
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="project-img-wrapper">
+                    <img
+                      src={p.imageUrl || "/path/to/default-image.jpg"}  // Fallback image
+                      className="project-img"
+                      alt={p.name || "Project Image"}
+                      onError={(e) => (e.target.src = "/path/to/default-image.jpg")}
+                    />
+                  </div>
+                  <div className="project-content">
+                    <h5 className="project-title">{p.name}</h5>
+                    <p className="project-desc">{p.description?.substring(0, 100)}...</p>
+                  </div>
                 </div>
-              )}
-            </div>
-      
-            {/* ---------------- PROJECT MODAL ---------------- */}
-            {selectedProject && showModal && (
-              <ProjectModal
-                showModal={showModal}
-                closeModal={closeProjectModal}
-                selectedProject={selectedProject}
-              />
-            )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ---------------- PROJECT MODAL ---------------- */}
+      {selectedProject && showModal && (
+        <ProjectModal
+          showModal={showModal}
+          closeModal={closeProjectModal}
+          selectedProject={selectedProject}
+        />
+      )}
 
 
       <div className="gold-line"></div>
 
       {/* ---------------- INSIGHTS SECTION ---------------- */}
-      <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
-        Our Latest Insights
-      </h2>
-      <div className="container mt-4 p-5">
-        <div className="row g-4">
-          <div className="col-12 col-md-6 col-lg-4">
-            <div className="insight-card">
-              <div className="insight-icon">🛠️</div>
-              <div className="insight-title">Reverse Engineering</div>
-              <div className="insight-desc">
-                Convert physical parts into accurate CAD models with precision scanning.
-              </div>
-            </div>
-          </div>
+      <section className="container py-5">
+        <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
+          Our Latest Insights
+        </h2>
 
-          <div className="col-12 col-md-6 col-lg-4">
-            <div className="insight-card">
-              <div className="insight-icon">📦</div>
-              <div className="insight-title">Product Design</div>
-              <div className="insight-desc">
-                Modern, manufacturable product designs from concept to final model.
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-6 col-lg-4">
-            <div className="insight-card">
-              <div className="insight-icon">🧩</div>
-              <div className="insight-title">Mold Design</div>
-              <div className="insight-desc">
-                High-precision mold designs suitable for mass production tooling.
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-6 col-lg-4">
-            <div className="insight-card">
-              <div className="insight-icon">🏭</div>
-              <div className="insight-title">Industrial Design</div>
-              <div className="insight-desc">
-                Aesthetic and functional designs tailored for your target market.
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-6 col-lg-4">
-            <div className="insight-card">
-              <div className="insight-icon">🖨️</div>
-              <div className="insight-title">3D Printing</div>
-              <div className="insight-desc">
-                Professional-grade 3D printing using PLA, ABS, Resin, PETG & Nylon.
-                Perfect for prototypes and functional testing.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <Insights />
+      </section>
 
       <div className="gold-line"></div>
 

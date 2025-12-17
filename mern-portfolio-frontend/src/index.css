@@ -26,7 +26,7 @@
 ================================ */
 body {
   background-color: var(--rich-black);
-  font-family: "Poppins", sans-serif;
+  font-family: "Book Antiqua", "Palatino", serif;
   color: var(--text-light);
 }
 
@@ -89,15 +89,20 @@ body {
 
 /* Custom Navbar Link Styles */
 .goldactive {
-  color: #FFD700 !important; /* Gold color for active link */
-  font-weight: 600 !important; /* Bold font for active link */
-  transform: translateY(-2px); /* Make it feel active even when clicked */
+  color: #FFD700 !important;
+  /* Gold color for active link */
+  font-weight: 600 !important;
+  /* Bold font for active link */
+  transform: translateY(-2px);
+  /* Make it feel active even when clicked */
 }
 
 /* Light color for inactive links */
 .lightactive {
-  color: #EDEDED !important; /* Light color for inactive link */
-  font-weight: 400 !important; /* Regular font for inactive link */
+  color: #EDEDED !important;
+  /* Light color for inactive link */
+  font-weight: 400 !important;
+  /* Regular font for inactive link */
 }
 
 /* Active link styles for NavLink */
@@ -109,7 +114,8 @@ body {
 
 /* Hover effect for all nav links */
 .nav-link:hover {
-  background-color: rgba(255, 215, 0, 0.1); /* Light gold background on hover */
+  background-color: rgba(255, 215, 0, 0.1);
+  /* Light gold background on hover */
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
 }
@@ -216,6 +222,7 @@ body {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+
   /* Stack footer content vertically on smaller screens */
   .footer-links,
   .footer-urls {
@@ -393,7 +400,8 @@ li {
   padding: 25px 35px;
   border-radius: 12px;
   border: 1px solid #D4AF37;
-  width: 250px;              /* Uniform sizing */
+  width: 250px;
+  /* Uniform sizing */
 }
 
 /* Hover Effect */
@@ -429,6 +437,7 @@ li {
   .stats-wrapper {
     gap: 2rem;
   }
+
   .stat-box {
     width: 220px;
     padding: 20px 30px;
@@ -461,107 +470,18 @@ li {
   .stat-box {
     padding: 18px 20px;
   }
+
   .stat-icon {
     font-size: 2.2rem;
   }
 }
-/* ===============================
-   INSIGHTS – BLACK & GOLD CARDS
-================================ */
-.insight-card {
-  background: var(--card-bg);
-  border: 1px solid var(--primary-gold);
-  padding: 30px 25px;
-  border-radius: 14px;
-  text-align: center;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  height: 100%;
-  transition: var(--transition-smooth);
-}
 
-/* Hover lift + glow */
-.insight-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 22px rgba(255, 215, 0, 0.35);
-  border-color: var(--button-gold);
-}
-
-/* ICON */
-.insight-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: var(--button-gold);
-  transition: var(--transition-smooth);
-}
-
-/* Icon animation on hover */
-.insight-card:hover .insight-icon {
-  transform: scale(1.2) rotate(8deg);
-  color: var(--primary-gold);
-}
-
-/* TITLE */
-.insight-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--text-light);
-  margin-bottom: 0.5rem;
-  transition: var(--transition-smooth);
-}
-
-.insight-card:hover .insight-title {
-  color: var(--button-gold);
-}
-
-/* DESCRIPTION (hidden → show on hover) */
-.insight-desc {
-  font-size: 0.95rem;
-  color: #dcdcdc;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  margin-top: 0;
-  transition: var(--transition-smooth);
-}
-
-.insight-card:hover .insight-desc {
-  opacity: 1;
-  max-height: 200px;
-  margin-top: 10px;
-}
-
-/* Responsive fallbacks */
-@media (max-width: 768px) {
-  .insight-card {
-    padding: 22px;
-  }
-  .insight-icon {
-    font-size: 2.4rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .insight-card {
-    margin-bottom: 1rem;
-  }
-}
-
-/* ===============================
-   SECTION TITLE
-================================*/
-.section-title {
-  color: #FFD700;
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
 /* ===============================
    PROJECT CARD BASE STYLING
 ================================*/
 .project-card {
-  background: #111; /* dark background */
+  background: #111;
+  /* dark background */
   border: 1px solid #FFD700;
   border-radius: 14px;
   overflow: hidden;
@@ -635,15 +555,18 @@ li {
 .tag-badge {
   padding: 5px 12px;
   border-radius: 50px;
-  background-color: #D4AF37; /* primary gold */
-  color: #0A0A0A; /* black text */
+  background-color: #D4AF37;
+  /* primary gold */
+  color: #0A0A0A;
+  /* black text */
   font-size: 0.8rem;
   font-weight: 600;
   transition: 0.3s ease;
 }
 
 .tag-badge:hover {
-  background-color: #FFD700; /* lighter gold */
+  background-color: #FFD700;
+  /* lighter gold */
   transform: translateY(-2px);
 }
 
@@ -708,10 +631,13 @@ li {
     justify-content: center;
   }
 }
+
 /* ============ MODAL STYLING ============ */
 .modal-content {
-  background-color: #0A0A0A; /* dark background */
-  color: #EDEDED; /* light text */
+  background-color: #0A0A0A;
+  /* dark background */
+  color: #EDEDED;
+  /* light text */
   border-radius: 15px;
   border: 1px solid #FFD700;
   overflow: hidden;
@@ -722,7 +648,8 @@ li {
 }
 
 .modal-header .btn-close {
-  filter: invert(1); /* white close button */
+  filter: invert(1);
+  /* white close button */
 }
 
 .modal-title {
@@ -843,7 +770,7 @@ li {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .testimonials .testimonial-content {
@@ -866,9 +793,11 @@ li {
 .carousel-item p {
   color: #EDEDED;
 }
+
 .carousel-item h5 {
   color: #FFD700;
 }
+
 .carousel-item h6 {
   color: #dcdcdc;
 }
@@ -903,17 +832,20 @@ li {
 .contact-input {
   background-color: #0A0A0A;
   color: #EDEDED;
-  border: none; /* Removed border */
+  border: none;
+  /* Removed border */
   border-radius: 8px;
   padding: 12px 15px;
   width: 100%;
-  box-shadow: inset 0 0 0 1px transparent; /* invisible border placeholder */
+  box-shadow: inset 0 0 0 1px transparent;
+  /* invisible border placeholder */
   transition: 0.3s ease, box-shadow 0.3s ease;
 }
 
 .contact-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #FFD700; /* glowing gold border on focus */
+  box-shadow: 0 0 0 2px #FFD700;
+  /* glowing gold border on focus */
 }
 
 .btn-gold {
@@ -938,17 +870,22 @@ li {
 
 
 .category-filter {
-  background-color: #0A0A0A; /* dark black background */
-  color: #FFD700; /* gold text */
-  border: 1px solid #FFD700; /* gold border */
+  background-color: #0A0A0A;
+  /* dark black background */
+  color: #FFD700;
+  /* gold text */
+  border: 1px solid #FFD700;
+  /* gold border */
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   text-transform: uppercase;
 }
 
 .category-filter option {
-  background-color: #0A0A0A; /* keep options black */
-  color: #FFD700; /* gold text */
+  background-color: #0A0A0A;
+  /* keep options black */
+  color: #FFD700;
+  /* gold text */
   text-transform: uppercase;
 }
 
@@ -959,28 +896,45 @@ li {
 }
 
 .project-category {
-  color: #FFD700;           /* Gold text */
-  font-weight: 600;          /* Semi-bold */
-  font-size: 0.9rem;         /* Slightly smaller than title */
-  text-transform: uppercase; /* Optional: makes it uppercase */
-  letter-spacing: 1px;       /* Spacing between letters */
-  margin-bottom: 0.5rem;     /* Space below the category */
+  color: #FFD700;
+  /* Gold text */
+  font-weight: 600;
+  /* Semi-bold */
+  font-size: 0.9rem;
+  /* Slightly smaller than title */
+  text-transform: uppercase;
+  /* Optional: makes it uppercase */
+  letter-spacing: 1px;
+  /* Spacing between letters */
+  margin-bottom: 0.5rem;
+  /* Space below the category */
 }
+
 .no-projects {
-  color: #EDEDED;           /* Light gray text for readability */
-  background-color: #0A0A0A; /* Dark black background */
-  padding: 15px 20px;        /* Space inside the box */
-  border-radius: 8px;        /* Rounded corners */
-  text-align: center;         /* Center the text */
-  font-weight: 500;           /* Medium weight */
-  font-size: 1rem;            /* Normal font size */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Subtle shadow */
+  color: #EDEDED;
+  /* Light gray text for readability */
+  background-color: #0A0A0A;
+  /* Dark black background */
+  padding: 15px 20px;
+  /* Space inside the box */
+  border-radius: 8px;
+  /* Rounded corners */
+  text-align: center;
+  /* Center the text */
+  font-weight: 500;
+  /* Medium weight */
+  font-size: 1rem;
+  /* Normal font size */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Subtle shadow */
 }
+
 /* ===============================
    INDUSTRIES – BLACK & GOLD CARDS
 ================================ */
 .industry-card {
-  background: var(--card-bg);           /* Same as insight card */
+  background: var(--card-bg);
+  /* Same as insight card */
   border: 1px solid var(--primary-gold);
   border-radius: 14px;
   padding: 20px 15px;
@@ -1026,32 +980,33 @@ li {
     margin-bottom: 1rem;
   }
 }
-    /* Gold Chips */
-    .chip {
-      display: inline-block;
-      padding: 8px 18px;
-      border-radius: 20px;
-      border: 1px solid var(--primary-gold);
-      color: var(--primary-gold);
-      font-size: 14px;
-      margin: 6px;
-      transition: all 0.3s ease;
-    }
 
-    .chip:hover {
-      background-color: var(--primary-gold);
-      color: #0A0A0A;
-      box-shadow: 0 0 10px var(--primary-gold);
-      cursor: pointer;
-    }
+/* Gold Chips */
+.chip {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--primary-gold);
+  color: var(--primary-gold);
+  font-size: 14px;
+  margin: 6px;
+  transition: all 0.3s ease;
+}
 
-       /* Gold Separator */
-    .gold-line {
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(to right, transparent, var(--primary-gold), transparent);
-      margin: 30px 0;
-    }
+.chip:hover {
+  background-color: var(--primary-gold);
+  color: #0A0A0A;
+  box-shadow: 0 0 10px var(--primary-gold);
+  cursor: pointer;
+}
+
+/* Gold Separator */
+.gold-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--primary-gold), transparent);
+  margin: 30px 0;
+}
 
 .btn-submit {
   background-color: #FFD700;
@@ -1065,7 +1020,22 @@ li {
 }
 
 .btn-submit:hover {
-  background-color: #0A0A0A; /* darker shade on hover */
+  background-color: #0A0A0A;
+  /* darker shade on hover */
   color: #FFD700;
 }
 
+svg text {
+  fill: white !important;
+}
+
+
+/* .react-donut-chart-legend-value {
+  display: none;
+} */
+label {
+  background-color: #1A1A1A;
+  color: #FFD700;
+  padding: 8px;
+  outline: "none";
+}

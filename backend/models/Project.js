@@ -2,8 +2,24 @@ import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    description: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    // 👇 NEW DOMAIN FIELD
+    domain: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Domain",
+      required: true,
+    },
 
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -11,18 +27,24 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
 
-    imageUrl: { type: String, required: true },
+    imageUrl: {
+      type: String,
+      required: true,
+    },
 
     taglines: {
       type: [String],
-      validate: v => v.length === 3, // exactly 3 taglines
+      validate: {
+        validator: (v) => v.length === 3,
+        message: "Exactly 3 taglines are required",
+      },
       required: true,
     },
 
     badge: {
       type: Boolean,
-      default: false, // 👈 default value
-    }
+      default: false,
+    },
   },
   { timestamps: true }
 );

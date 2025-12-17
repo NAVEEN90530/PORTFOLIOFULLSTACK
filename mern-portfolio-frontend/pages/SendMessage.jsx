@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/api";
 import { toast } from "react-toastify";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 
 export default function SendMessage() {
@@ -18,7 +20,7 @@ export default function SendMessage() {
     useEffect(() => {
         const loadCategories = async () => {
             try {
-                const res = await API.get("/categery");
+                const res = await API.get("/categories");
                 setCategories(res.data);
             } catch (err) {
                 console.error("Failed to fetch categories:", err);
@@ -47,9 +49,19 @@ export default function SendMessage() {
             setLoading(false); // stop loading
         }
     };
+    useEffect(() => {
+        AOS.init({
+            duration: 40000,
+            easing: "ease-in-out",
+            once: false,
+        });
+
+        AOS.refreshHard();
+    }, []);
 
     return (
         <div
+            data-aos="fade-up"
             style={{
                 display: "flex",
                 justifyContent: "center",
@@ -65,7 +77,7 @@ export default function SendMessage() {
             }}
 
         >
-            <h3 style={{ color: "#FFD700", marginBottom: "20px" }}>Send a Message</h3>
+            <h3 style={{ color: "#FFD700", marginBottom: "20px" }}>Get In Touch</h3>
 
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
                 <div className="mb-3">

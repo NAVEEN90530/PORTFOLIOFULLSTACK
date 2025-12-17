@@ -1,33 +1,66 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/categery";
+const API_URL = "http://localhost:5000/api/categories";
 
-// List Categories
+/* ===============================
+   LIST ALL CATEGORIES
+================================ */
 export const listCategories = async () => {
   const response = await axios.get(API_URL);
   return response.data;
 };
 
-// Create Category
+/* ===============================
+   LIST CATEGORIES BY DOMAIN
+================================ */
+export const listDomainCategories = async (domainId = "") => {
+  // Include API_URL so the request goes to the backend
+  const url = domainId ? `${API_URL}?domain=${domainId}` : API_URL;
+  const { data } = await axios.get(url);
+  return data;
+};
+
+/* ===============================
+   CREATE CATEGORY (ADMIN)
+================================ */
 export const createCategory = async (categoryData) => {
   try {
-    const response = await axios.post(API_URL, categoryData, { withCredentials: true });
-    console.log('Category created:');
-    return response.data; // Return created category to use in UI
+    const response = await axios.post(API_URL, categoryData, {
+      withCredentials: true,
+    });
+    return response.data;
   } catch (error) {
-    console.error('Error creating category:', error.response ? error.response.data : error.message);
-    throw error; // Ensure we throw the error so the caller can handle it
+    console.error("Error creating category:", error.response?.data || error.message);
+    throw error;
   }
 };
 
-// Update Category
+/* ===============================
+   UPDATE CATEGORY
+================================ */
 export const updateCategory = async (id, data) => {
-  const response = await axios.put(`${API_URL}/${id}`, data, { withCredentials: true });
-  return response.data;
+  try {
+    const response = await axios.put(`${API_URL}/${id}`, data, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating category:", error.response?.data || error.message);
+    throw error;
+  }
 };
 
-// Delete Category
+/* ===============================
+   DELETE CATEGORY
+================================ */
 export const deleteCategory = async (id) => {
-  const response = await axios.delete(`${API_URL}/${id}`, { withCredentials: true });
-  return response.data;
+  try {
+    const response = await axios.delete(`${API_URL}/${id}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting category:", error.response?.data || error.message);
+    throw error;
+  }
 };

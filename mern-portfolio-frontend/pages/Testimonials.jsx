@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
@@ -7,15 +9,25 @@ export default function Testimonials() {
   useEffect(() => {
     API.get("/testimonials")
       .then(res => setTestimonials(res.data))
-      .catch(() => {});
+      .catch(() => { });
+  }, []);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 40000,
+      easing: "ease-in-out",
+      once: false,
+    });
+  
+    AOS.refreshHard(); 
   }, []);
 
   if (testimonials.length === 0) return null;
 
   return (
-    <div className="container py-5">
+    <div  data-aos="fade-up" className="container py-5">
       <h2 className="text-center mb-4" style={{ color: "#FFD700" }}>
-       What Our Clients Says
+        What Our Clients Says
       </h2>
 
       <div
@@ -46,7 +58,7 @@ export default function Testimonials() {
           data-bs-target="#testimonialCarousel"
           data-bs-slide="prev"
         >
-          
+
           <span className="visually-hidden">Previous</span>
         </button>
         <button
@@ -55,7 +67,7 @@ export default function Testimonials() {
           data-bs-target="#testimonialCarousel"
           data-bs-slide="next"
         >
-          
+
           <span className="visually-hidden">Next</span>
         </button>
       </div>

@@ -1,0 +1,100 @@
+/* ===============================
+   INSIGHTS – BLACK & GOLD CARDS
+================================ */
+
+/* CARD BASE */
+.insight-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid #FFD700;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Hover lift */
+.insight-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4);
+}
+
+/* BLACK OVERLAY */
+.insight-img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show overlay on hover */
+.insight-card:hover .insight-img-overlay {
+  opacity: 1;
+}
+
+/* DEFAULT VISIBLE CONTENT (icon + title) */
+.insight-content-visible {
+  position: relative;
+  z-index: 2;
+  color: #FFD700;
+  padding: 20px;
+  transition: opacity 0.3s ease;
+}
+
+/* Hide default visible content when hovering */
+.insight-card:hover .insight-content-visible {
+  opacity: 0;
+}
+
+/* HOVER CONTENT (icon + title + desc) */
+.insight-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: #FFD700;
+  text-align: center;
+  opacity: 0;
+  width: 90%;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+
+/* ICON */
+.insight-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.insight-card:hover .insight-icon {
+  transform: scale(1.2);
+}
+
+/* TITLE */
+.insight-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* DESCRIPTION */
+.insight-desc {
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .insight-card { padding: 20px; }
+  .insight-icon { font-size: 2.4rem; }
+  .insight-title { font-size: 1.1rem; }
+  .insight-desc { font-size: 0.85rem; }
+}

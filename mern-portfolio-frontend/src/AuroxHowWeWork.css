@@ -1,0 +1,183 @@
+/* ===============================
+   AUROX – HOW WE WORK SECTION
+================================ */
+
+.aurox-work-section {
+  background: #0a0a0a;
+  padding: 80px 0;
+  color: #ededed;
+  font-family: "Book Antiqua", serif;
+}
+
+/* -------------------------------
+   TITLE
+-------------------------------- */
+
+.aurox-title {
+  font-size: 42px;
+  color: #d4af37;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.aurox-subtitle {
+  color: #bfbfbf;
+  font-size: 16px;
+  margin-bottom: 60px;
+}
+
+/* -------------------------------
+   PROGRESS WRAPPER
+-------------------------------- */
+
+.aurox-progress-wrapper {
+  position: relative;
+  padding-left: 90px; /* space for line + icons */
+}
+
+/* -------------------------------
+   VERTICAL LINE (TRACK)
+-------------------------------- */
+
+.aurox-progress-line {
+  position: absolute;
+  top: 0;
+  left: 38px;
+  width: 3px;
+  height: 100%;
+  background: rgba(212, 175, 55, 0.25);
+  border-radius: 2px;
+}
+
+/* -------------------------------
+   GOLD FILL (ANIMATED)
+-------------------------------- */
+
+.aurox-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0; /* IMPORTANT: start empty */
+  background: linear-gradient(to bottom, #ffd700, #d4af37);
+  border-radius: 2px;
+  transition: height 0.4s ease-out;
+}
+
+/* -------------------------------
+   PROCESS STEP
+-------------------------------- */
+
+.aurox-process-step {
+  position: relative;
+  margin-bottom: 70px;
+  opacity: 0.4;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.aurox-process-step.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -------------------------------
+   ICON COLUMN
+-------------------------------- */
+
+.process-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* -------------------------------
+   ICON
+-------------------------------- */
+
+.process-icon {
+  width: 46px;
+  height: 46px;
+  background: #0a0a0a;
+  border: 2px solid #d4af37;
+  border-radius: 50%;
+  color: #d4af37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.aurox-process-step.active .process-icon {
+  background: #d4af37;
+  color: #0a0a0a;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+
+/* -------------------------------
+   CONTENT
+-------------------------------- */
+
+.process-content {
+  padding-left: 20px;
+}
+
+.step-number {
+  color: #d4af37;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.aurox-step-title {
+  font-size: 24px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.aurox-step-desc {
+  font-size: 18px;
+  color: #cfcfcf;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+/* -------------------------------
+   BUTTON
+-------------------------------- */
+
+.aurox-btn {
+  background: linear-gradient(to right, #ffd700, #d4af37);
+  border: none;
+  padding: 12px 34px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #0a0a0a;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.aurox-btn:hover {
+  background: #ffd700;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+/* -------------------------------
+   RESPONSIVE
+-------------------------------- */
+
+@media (max-width: 768px) {
+  .aurox-progress-wrapper {
+    padding-left: 60px;
+  }
+
+  .aurox-title {
+    font-size: 32px;
+  }
+
+  .aurox-step-desc {
+    max-width: 100%;
+  }
+}

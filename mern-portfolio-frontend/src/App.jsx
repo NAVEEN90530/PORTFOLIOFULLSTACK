@@ -23,6 +23,7 @@ import AppNavbar from "../components/AppNavbar";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ManageDomain from "../pages/admin/ManageDomain";
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
         <Route path="/admin/adminpage" element={<PrivateRoute><AdminNavbar /><AdminBoard /></PrivateRoute>} />
         <Route path="/admin/stats" element={<PrivateRoute><AdminNavbar /><ManageStats /></PrivateRoute>} />
         <Route path="/admin/category" element={<PrivateRoute><AdminNavbar /><CategoryCrudPage /></PrivateRoute>} />
+        <Route path="/admin/domain" element={<PrivateRoute><AdminNavbar /><ManageDomain /></PrivateRoute>} />
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />

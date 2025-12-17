@@ -49,6 +49,7 @@ const AdminNavbar = () => {
           ["Admin Page", "/admin/adminpage"],
           ["Manage Category", "/admin/category"],
           ["Manage Contacts", "/admin/contacts"],
+          ["Manage Domain", "/admin/domain"],
         ].map(([label, path]) => (
           <li className="nav-item" key={path}>
             <NavLink

@@ -22,8 +22,9 @@ import testimonialRoutes from './routes/testimonialRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import quoteRoutes from './routes/quoteRoutes.js';
 import categeryRoutes from './routes/categeryRoutes.js';
-import linkRoutes from './routes/linksRoutes.js';
+import linksRoutes from './routes/linksRoutes.js';
 import createAdmin from './config/createAdmin.js';
+import domainRoutes from './routes/domainRoutes.js';
 import { logoutUser } from './controllers/authController.js';
 
 
@@ -140,19 +141,19 @@ const loginLimiter = rateLimit({
    ---------------------- */
 app.get('/', (req, res) => res.send('MERN Portfolio Backend is running'));
 
-// Auth routes (apply loginLimiter to login endpoint inside authRoutes router or here)
-app.use('/api/auth/login', loginLimiter); // apply to login path
-
-app.use('/api/auth/logout', logoutUser); // apply to login path
-
+// Auth
+app.use('/api/auth/login', loginLimiter);
+app.use('/api/auth/logout', logoutUser);
 app.use('/api/auth', authRoutes);
 
+// Core APIs
 app.use('/api/projects', projectRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/quotes', quoteRoutes);
-app.use('/api/categery', categeryRoutes);
-app.use('/api/links', linkRoutes);
+app.use('/api/links', linksRoutes);
+app.use('/api/domains', domainRoutes);
+app.use('/api/categories', categeryRoutes);
 
 
 /* ----------------------
