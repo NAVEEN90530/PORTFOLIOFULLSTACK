@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import API from "../api/api";
 import ProjectModal from "../components/ProjectModal";
 import ProjectCard from "../components/ProjectCard";
+import Insights from "./Insights";
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
@@ -18,11 +19,14 @@ export default function Projects() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Read domain query from URL on first load
+  // Read domain and category query from URL on first load
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const domainFromQuery = params.get("domain") || "";
+    const categoryFromQuery = params.get("category") || "all";
+
     setFilterDomain(domainFromQuery);
+    setFilterCategory(categoryFromQuery);
 
     loadDomains();
     loadCategories();
@@ -72,14 +76,16 @@ export default function Projects() {
     const newDomain = e.target.value;
     setFilterDomain(newDomain);
     setFilterCategory("all"); // reset category when domain changes
-    navigate(`/projects${newDomain ? `?domain=${newDomain}` : ""}`); // update URL
+    navigate(`/projects?domain=${newDomain}`); // update URL with domain
   };
 
   const handleCategoryChange = (e) => {
-    setFilterCategory(e.target.value);
+    const newCategory = e.target.value;
+    setFilterCategory(newCategory);
+    navigate(`/projects?domain=${filterDomain}&category=${newCategory}`); // update URL with category
   };
 
-  // Filter projects
+  // Filter projects based on selected filters
   const filteredProjects = projects
     .filter((p) => !filterDomain || p.domain?.slug === filterDomain)
     .filter((p) => filterCategory === "all" || p.category?._id === filterCategory);
@@ -93,6 +99,8 @@ export default function Projects() {
 
   return (
     <div className="container py-5">
+      <Insights />
+      
       <h2 className="section-title mb-4" style={{ color: "#FFD700" }}>
         Projects
       </h2>

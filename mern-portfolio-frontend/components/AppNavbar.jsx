@@ -1,15 +1,15 @@
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
+import logo from "../src/assects/logo.png";
 
 const AppNavbar = () => {
   const links = [
     ["Home", "/"],
     ["About", "/about"],
     ["Our Services", "/services"],
-    ["Projects", "/projects"],
     ["Process", "/process"],
-    ["Contact", "/get-in-touch"],
-    ["Admin", "/admin/login"],
+    ["Contact us", "/get-in-touch"],
+    // ["Admin", "/admin/login"],
   ];
 
   // Inline styles
@@ -45,14 +45,19 @@ const AppNavbar = () => {
       sticky="top"
       style={{
         backgroundColor: "#0A0A0A", // var(--rich-black)
-        borderBottom: "1px solid #D4AF37", // var(--primary-gold)
+        boxShadow: "0 2px 4px #D4AF37",
         zIndex: 1050,
       }}
     >
       <Container>
         {/* Brand */}
         <Navbar.Brand as={NavLink} to="/" style={brandStyle}>
-          My Portfolio
+          <img
+                      src={logo}
+                      className="logo-img"
+                      alt="Project Image"
+                      style={{height:'75px'}}
+                    />
         </Navbar.Brand>
 
         {/* Toggle Button */}

@@ -49,12 +49,6 @@ body {
   object-fit: contain;
 }
 
-.card:hover {
-  box-shadow: 0 4px 15px var(--card-hover-shadow);
-  transform: scale(1.05);
-  border-color: var(--button-gold);
-}
-
 /* ===============================
    BUTTONS
 ================================ */
@@ -426,10 +420,11 @@ li {
 }
 
 .project-title {
-  color: #FFD700;
+  color: var(--primary-gold);
   font-size: 1.25rem;
   margin-bottom: 10px;
-  font-weight: 600;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
 .project-desc {
@@ -445,12 +440,12 @@ li {
 .project-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 2px;
   margin-top: auto;
 }
 
 .tag-badge {
-  padding: 5px 12px;
+  padding: 5px;
   border-radius: 50px;
   background-color: #D4AF37;
   /* primary gold */
@@ -881,7 +876,6 @@ li {
 /* Gold Chips */
 .chip {
   display: inline-block;
-  padding: 8px 18px;
   border-radius: 20px;
   border: 1px solid var(--primary-gold);
   color: var(--primary-gold);
@@ -926,10 +920,6 @@ svg text {
   fill: white !important;
 }
 
-
-/* .react-donut-chart-legend-value {
-  display: none;
-} */
 label {
   background-color: #1A1A1A;
   color: #FFD700;

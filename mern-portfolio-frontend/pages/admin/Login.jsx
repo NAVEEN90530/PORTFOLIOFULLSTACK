@@ -22,7 +22,7 @@ export default function Login() {
 
       toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
 
-      setTimeout(() => navigate("/admin/adminpage"), 1000);
+      setTimeout(() => navigate("/admin/dashboard"), 1000);
     } catch (err) {
       setError("Invalid username or password");
     } finally {

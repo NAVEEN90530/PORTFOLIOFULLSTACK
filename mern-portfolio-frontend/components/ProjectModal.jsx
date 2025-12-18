@@ -1,19 +1,28 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Spinner } from "react-bootstrap";
 
 export default function ProjectModal({ showModal, closeModal, selectedProject }) {
   return (
-    <Modal show={showModal} onHide={closeModal} centered size="lg">
+    <Modal
+      show={showModal}
+      onHide={closeModal}
+      centered
+      size="lg"
+      aria-labelledby="project-modal-title"
+    >
       <Modal.Header closeButton style={{ backgroundColor: "#1A1A1A", color: "#FFD700" }}>
-        <Modal.Title>{selectedProject?.name}</Modal.Title>
+        <Modal.Title id="project-modal-title" className="text-center" >
+          {selectedProject?.name || "Untitled Project"}
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body style={{ backgroundColor: "#1A1A1A", color: "#EDEDED" }}>
-        {selectedProject && (
+        {selectedProject ? (
           <>
+            {/* Project Image */}
             <img
               src={selectedProject.imageUrl || "/placeholder.png"}
-              alt={selectedProject.name}
+              alt={selectedProject.name || "Project Image"}
               className="img-fluid rounded mb-3"
               style={{ maxHeight: "300px", objectFit: "cover" }}
             />
@@ -63,12 +72,18 @@ export default function ProjectModal({ showModal, closeModal, selectedProject })
                   href={selectedProject.projectLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Visit project website"
                 >
                   Visit Project
                 </Button>
               </div>
             )}
           </>
+        ) : (
+          <div className="text-center">
+            <Spinner animation="border" variant="light" />
+            <p className="mt-2">Loading project details...</p>
+          </div>
         )}
       </Modal.Body>
     </Modal>
