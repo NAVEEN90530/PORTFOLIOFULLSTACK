@@ -37,17 +37,7 @@ body {
 /* ===============================
    CARDS
 ================================ */
-.card {
-  border-radius: var(--radius-md);
-  background: var(--card-bg);
-  border: 1px solid var(--primary-gold);
-  transition: var(--transition-smooth);
-}
 
-.card img {
-  height: 400px;
-  object-fit: contain;
-}
 
 /* ===============================
    BUTTONS

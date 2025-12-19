@@ -30,7 +30,7 @@ export default function Services() {
 
   return (
     <div className="container py-5">
-      <h2 className="text-center mb-2" style={{ color: "#FFD700", fontWeight: "bold" }}>
+      <h2 className="text-center mt-2" style={{ color: "#FFD700", fontWeight: "bold" }}>
         Our Services
       </h2> 
       <Projects />

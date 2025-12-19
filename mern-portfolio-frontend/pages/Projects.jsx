@@ -99,9 +99,12 @@ export default function Projects() {
 
   return (
     <div className="container py-5">
+
       <Insights />
-      
-      <h2 className="section-title mb-4" style={{ color: "#FFD700" }}>
+
+      <div className="gold-line"></div>
+
+      <h2 className="section-title text-center mt-3 mb-5" style={{ color: "#FFD700" }}>
         Projects
       </h2>
 
@@ -123,7 +126,7 @@ export default function Projects() {
       </div>
 
       {/* Category Filter */}
-      <div className="mb-4 d-flex gap-2 align-items-center">
+      <div className="mb-5 d-flex gap-2 align-items-center">
         <label className="text-light mb-0 fw-bold">Category:</label>
         <select
           className="form-select form-select-sm"
@@ -141,9 +144,9 @@ export default function Projects() {
 
       {/* Project Cards */}
       {loadingProjects ? (
-        <p className="text-light">Loading projects...</p>
+        <p className="text-light text-center">Loading projects...</p>
       ) : filteredProjects.length === 0 ? (
-        <p className="text-light">No projects available.</p>
+        <p className="text-light text-center">No projects available.</p>
       ) : (
         <div className="row">
           {filteredProjects.map((p) => (

@@ -16,7 +16,7 @@ export default function ProjectCard({ project, onClick }) {
           transition: "transform 0.3s ease, box-shadow 0.3s ease", 
           position: "relative",
           transform: isHovered ? "scale(1.03)" : "scale(1)", 
-          boxShadow:"0 4px 10px #FFD700",
+          boxShadow:"0 2px 10px #FFD700",
         }}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
