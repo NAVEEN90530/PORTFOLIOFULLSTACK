@@ -7,37 +7,37 @@ import "../src/AuroxHowWeWork.css";
 const steps = [
   {
     id: "01",
-    title: "UPLOAD PHOTOS / DATA",
+    title: "Share photos ,Scan data, concept or other detail",
     desc: "Upload clear photos from multiple angles. Include key dimensions or CAD files to help us understand the geometry accurately.",
     icon: <Upload size={28} />,
   },
   {
     id: "02",
-    title: "PRECISION QUOTATION",
+    title: "We prepare a quote",
     desc: "Based on your requirements, tolerances, and timeline, we prepare a transparent quote for your approval.",
     icon: <FileText size={28} />,
   },
   {
     id: "03",
-    title: "PART HANDOVER / 3D SCANNING",
+    title: "we share initial Concept design for approval",
     desc: "Send the physical part to our facility or let our team perform on-site high-accuracy 3D scanning.",
     icon: <Box size={28} />,
   },
   {
     id: "04",
-    title: "3D SCANNING & CAD PREPARATION",
+    title: "Based on the confirmation will share the final design & data with manufacturing feasibility (injection molding, sheet metal & 3D printing)",
     desc: "We 3D scan the parts and prepare precise CAD data in formats like STL, STEP, IGES, or X_T.",
     icon: <Scan size={28} />,
   },
   {
     id: "05",
-    title: "DOWNLOAD LINK & PROJECT REPORT",
+    title: "Further development of Prototype model with functionality",
     desc: "Receive a secure download link along with a detailed project report via email.",
     icon: <Download size={28} />,
   },
   {
     id: "06",
-    title: "PARTS SHIPPED BACK",
+    title: "CAD data & drawings prepare for production.",
     desc: "After successful completion, the parts are safely shipped back to your location.",
     icon: <Truck size={28} />,
   },
@@ -113,9 +113,9 @@ export default function AuroxHowWeWork() {
                 </div>
 
                 <div className="col-10 process-content">
-                  <span className="step-number">{step.id}</span>
+                  {/* <span className="step-number">{step.id}</span> */}
                   <h4 className="aurox-step-title">{step.title}</h4>
-                  <p className="aurox-step-desc">{step.desc}</p>
+                  {/* <p className="aurox-step-desc">{step.desc}</p> */}
                 </div>
               </div>
             </div>

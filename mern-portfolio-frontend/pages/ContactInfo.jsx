@@ -18,11 +18,17 @@ export default function ContactInfo() {
     github: "",
   });
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const API_BASE = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError(null); // Reset any previous errors
+
         // Fetch contact info
         const contactRes = await axios.get(`${API_BASE}/settings`);
         if (contactRes.data.contact) {
@@ -36,15 +42,35 @@ export default function ContactInfo() {
         // Fetch social links
         const linksRes = await axios.get(`${API_BASE}/links`);
         if (linksRes.data.links) {
-          setSocialLinks(linksRes.data.links);
+          setSocialLinks(linksRes.data);
         }
       } catch (err) {
+        setError("Failed to fetch contact info or social links.");
         console.error("Failed to fetch contact info or links:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return <div style={{ color: "#FFD700", textAlign: "center" }}>Loading...</div>;
+  }
+
+  if (error) {
+    return <div style={{ color: "red", textAlign: "center" }}>{error}</div>;
+  }
+
+  // Social links info
+  const socialMedia = [
+    { name: "Facebook", icon: <FaFacebook size={24} />, url: socialLinks.facebook, color: "#3b5998" },
+    { name: "Twitter", icon: <FaXTwitter size={24} />, url: socialLinks.twitter, color: "#1da1f2" },
+    { name: "Instagram", icon: <FaInstagram size={24} />, url: socialLinks.instagram, color: "#e1306c" },
+    { name: "LinkedIn", icon: <FaLinkedin size={24} />, url: socialLinks.linkedin, color: "#0077b5" },
+    { name: "GitHub", icon: <FaGithub size={24} />, url: socialLinks.github, color: "#333" },
+  ];
 
   return (
     <div
@@ -79,7 +105,7 @@ export default function ContactInfo() {
         </p>
       )}
 
-      {/* Social Links in a column */}
+      {/* Social Links */}
       <div style={{ marginTop: "20px" }}>
         <h4 style={{ color: "#FFD700", marginBottom: "10px" }}>Follow Me</h4>
         <div
@@ -90,30 +116,23 @@ export default function ContactInfo() {
             gap: "15px", // spacing between each link
           }}
         >
-          {socialLinks.facebook && (
-            <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" style={{ color: "#3b5998", display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaFacebook size={24} /> {socialLinks.facebook}
-            </a>
-          )}
-          {socialLinks.twitter && (
-            <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" style={{ color: "#1da1f2", display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaXTwitter size={24} /> {socialLinks.twitter}
-            </a>
-          )}
-          {socialLinks.instagram && (
-            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" style={{ color: "#e1306c", display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaInstagram size={24} /> {socialLinks.instagram}
-            </a>
-          )}
-          {socialLinks.linkedin && (
-            <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: "#0077b5", display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaLinkedin size={24} /> {socialLinks.linkedin}
-            </a>
-          )}
-          {socialLinks.github && (
-            <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" style={{ color: "#333", display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaGithub size={24} /> {socialLinks.github}
-            </a>
+          {socialMedia.map(({ name, icon, url, color }) =>
+            url ? (
+              <a
+                key={name}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                {icon} {url}
+              </a>
+            ) : null
           )}
         </div>
       </div>

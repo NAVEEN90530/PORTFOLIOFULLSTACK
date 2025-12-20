@@ -10,7 +10,7 @@ export default function SendMessage() {
         name: "",
         email: "",
         phone: "",
-        category: "",
+        domain: "",
         message: "",
     });
 
@@ -20,10 +20,10 @@ export default function SendMessage() {
     useEffect(() => {
         const loadCategories = async () => {
             try {
-                const res = await API.get("/categories");
+                const res = await API.get("/domains");
                 setCategories(res.data);
             } catch (err) {
-                console.error("Failed to fetch categories:", err);
+                console.error("Failed to fetch Domain:", err);
             }
         };
 
@@ -113,11 +113,11 @@ export default function SendMessage() {
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">Category</label>
+                    <label className="form-label">Domain</label>
                     <select
                         className="form-control"
-                        value={form.category}
-                        onChange={(e) => setForm({ ...form, category: e.target.value })}
+                        value={form.domain}
+                        onChange={(e) => setForm({ ...form, domain: e.target.value })}
                         required
                         style={{
                             backgroundColor: "#1A1A1A", // dark background

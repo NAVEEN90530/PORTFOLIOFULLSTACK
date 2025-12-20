@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const { name, email, phone, category, message } = req.body;
+    const { name, email, phone, domain, message } = req.body;
 
     // Save quote to database
-    const quote = await Quote.create({ name, email, phone, category, message });
+    const quote = await Quote.create({ name, email, phone, domain, message });
 
     // Styled email to admin
     const adminEmailContent = `
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Category:</strong> ${category}</p>
+        <p><strong>Domain:</strong> ${domain}</p>
         <p><strong>Message:</strong></p>
         <p style="padding: 10px; background-color: #f4f4f4; border-radius: 5px;">${message}</p>
       </div>
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
     const userEmailContent = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
         <h2 style="color: #D4AF37;">Hello ${name},</h2>
-        <p>Thanks for contacting us! We received your message regarding <span  style="color: #D4AF37;">${category}</span> and will get back to you shortly.</p>
+        <p>Thanks for contacting us! We received your message regarding <span  style="color: #D4AF37;">${domain}</span> and will get back to you shortly.</p>
         <p>Your message:</p>
         <p style="padding: 10px; background-color: #f4f4f4; border-radius: 5px;">${message}</p>
         <br/>

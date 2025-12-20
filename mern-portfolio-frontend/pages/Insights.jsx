@@ -221,16 +221,16 @@ export default function Insights() {
                   <h5>Why Choose Us:</h5>
                   <ul>
                     {selectedInsight.whyChoose.map((point, idx) => (
-                      <li key={idx}>{point}</li>
+                      <li key={idx}>✅  {point}</li>
                     ))}
                   </ul>
                 </>
               )}
             </Modal.Body>
             <Modal.Footer style={{ backgroundColor: "#1A1A1A" }}>
-              <Button variant="secondary" onClick={handleClose}>
+              {/* <Button variant="secondary" onClick={handleClose}>
                 Close
-              </Button>
+              </Button> */}
               {selectedInsight?.slug && (
                 <Button variant="warning" onClick={handleViewProjects}>
                   View Projects

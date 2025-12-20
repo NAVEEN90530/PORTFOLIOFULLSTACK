@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
-
-// Social media icons
+import React, { useEffect, useState } from "react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function ManageLinks() {
   const [links, setLinks] = useState({
@@ -14,37 +12,60 @@ export default function ManageLinks() {
     linkedin: "",
     github: "",
   });
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const API_BASE = import.meta.env.VITE_API_URL;
 
+  // Fetch links when the component is mounted
   useEffect(() => {
     fetchLinks();
   }, []);
 
-  const fetchLinks = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/links`, { withCredentials: true });
-      if (res.data.links) setLinks(res.data.links);
-    } catch (err) {
-      toast.error("Failed to load links");
-      console.error(err);
+ // Fetch the current links from the backend
+const fetchLinks = async () => {
+  try {
+    const res = await axios.get(`${API_BASE}/links`, { withCredentials: true });
+    if (res.data && res.data.links) {
+      setLinks(res.data.links);  // Only set the links object
     }
-  };
+  } catch (err) {
+    toast.error("Failed to load links");
+    console.error(err);
+  }
+};
 
+
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLinks({ ...links, [name]: value });
   };
 
+  // Handle the form submission to update the links
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const linksToUpdate = {
+      facebook: links.facebook || "",
+      twitter: links.twitter || "",
+      instagram: links.instagram || "",
+      linkedin: links.linkedin || "",
+      github: links.github || "",
+    };
+
     try {
-      await axios.put(`${API_BASE}/links`, links, { withCredentials: true });
-      toast.success("Links updated successfully!");
+      const res = await axios.put(`${API_BASE}/links`, linksToUpdate, { withCredentials: true });
+
+      // If the update is successful, fetch the updated links again
+      if (res.data && res.data.links) {
+        setLinks(res.data.links);
+        toast.success("Links updated successfully!");
+      } else {
+        toast.error("Failed to update links");
+      }
     } catch (err) {
-      toast.error("Failed to update links");
+      toast.error("An error occurred while updating the links");
       console.error(err);
     } finally {
       setLoading(false);
@@ -62,9 +83,7 @@ export default function ManageLinks() {
   return (
     <div className="container py-4" style={{ maxWidth: "800px" }}>
       {/* Form Section */}
-      <h2 className="text-center mb-4">
-        Manage Social Links
-      </h2>
+      <h2 className="text-center mb-4">Manage Social Links</h2>
 
       <div
         className="card p-4 shadow mb-4"
@@ -84,7 +103,7 @@ export default function ManageLinks() {
                 name={key}
                 placeholder={placeholder}
                 className="form-control"
-                value={links[key]}
+                value={links[key] || ""}
                 onChange={handleChange}
                 style={{
                   backgroundColor: "#1A1A1A",
@@ -119,61 +138,30 @@ export default function ManageLinks() {
       </div>
 
       {/* Preview Section */}
-      <h4 style={{ color: "#FFD700", marginBottom: "12px" }}>Preview Links</h4>
-      <div
-        className="social-links"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          color: "#EDEDED",
-        }}
-      >
-        {links.facebook && (
-          <div>
-            <strong>Facebook:</strong>{" "}
-            <a href={links.facebook} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
-              {links.facebook}
-            </a>
-          </div>
-        )}
-
-        {links.twitter && (
-          <div>
-            <strong>Twitter:</strong>{" "}
-            <a href={links.twitter} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
-              {links.twitter}
-            </a>
-          </div>
-        )}
-
-        {links.instagram && (
-          <div>
-            <strong>Instagram:</strong>{" "}
-            <a href={links.instagram} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
-              {links.instagram}
-            </a>
-          </div>
-        )}
-
-        {links.linkedin && (
-          <div>
-            <strong>LinkedIn:</strong>{" "}
-            <a href={links.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
-              {links.linkedin}
-            </a>
-          </div>
-        )}
-
-        {links.github && (
-          <div>
-            <strong>GitHub:</strong>{" "}
-            <a href={links.github} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
-              {links.github}
-            </a>
-          </div>
-        )}
+<h4 style={{ color: "#FFD700", marginBottom: "12px" }}>Preview Links</h4>
+<div
+  className="social-links"
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    color: "#EDEDED",
+  }}
+>
+  {Object.entries(links).map(([key, value]) => (
+    // Exclude _id and updatedAt and ensure the link is valid
+    (key !== "_id" && key !== "updatedAt" && value && typeof value === "string" && value.trim() !== "") && (
+      <div key={key}>
+        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
+        <a href={value} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+          {value}
+        </a>
       </div>
+    )
+  ))}
+</div>
+
+
     </div>
   );
 }

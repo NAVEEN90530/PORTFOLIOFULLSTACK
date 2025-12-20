@@ -71,7 +71,7 @@ export default function Home() {
             style={{
               fontFamily: "Castellar, serif",
               fontWeight: "500",
-              fontSize: "5rem",
+              fontSize: "3rem",
               marginBottom: "1rem",
               textShadow: "0 0 20px #000",
               cursor: "pointer",
@@ -99,7 +99,7 @@ export default function Home() {
               textShadow: "0 0 10px #000",
             }}
           >
-            Product and Industrial Design Services
+           Engineering Design Services
           </h3>
 
           <p
@@ -227,13 +227,6 @@ export default function Home() {
 
       <div className="gold-line"></div>
 
-      {/* ---------------- RECENT PROJECTS ---------------- */}
-
-      <RecentProjects />
-
-
-      <div className="gold-line"></div>
-
       {/* ---------------- INSIGHTS SECTION ---------------- */}
       <section className="container py-5">
         <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
@@ -241,7 +234,57 @@ export default function Home() {
         </h2>
 
         <Insights />
-        <div
+
+      </section>
+
+      <div className="gold-line"></div>
+
+      {/* ---------------- WHY CHOOSE US ---------------- */}
+      <section className="choose-us py-5">
+        <div className="container">
+          <h2 className="section-title text-center mb-5">Why Choose Us</h2>
+          <div className="row g-4">
+            <div className="col-md-4">
+              <div className="choose-card">
+                <div className="choose-icon"><FiTool /></div>
+                <h5 className="choose-title">End to End Support</h5>
+                <p className="choose-desc">
+                  We help design and develop your product under one roof. We are the one-stop solution for design, development, and manufacturing your product enclosures and parts. With access to over 5 different technologies and 50+ different materials, we make design to production seamless.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="choose-card">
+                <div className="choose-icon"><FiStar /></div>
+                <h5 className="choose-title">Superior Finish</h5>
+                <p className="choose-desc">
+                  We have various types of finishes available to make your product stand out. Super fine Glossy finish, Matt finish with various color options are available. We also do electroplating to give a metallic gold and silver finish. Time to stop paying for low-quality products.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="choose-card">
+                <div className="choose-icon"><FiCpu /></div>
+                <h5 className="choose-title">Technical Expertise</h5>
+                <p className="choose-desc">
+                  Combined experience in manufacturing, we guide you with the best technology, material, and process to use for manufacturing your product. We also come up with innovative ways to address challenges. We ensure to balance cost and quality as per your requirements.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="gold-line"></div>
+      <AuroxHowWeWork />
+
+      <div className="gold-line"></div>
+
+      {/* ---------------- RECENT PROJECTS ---------------- */}
+
+      <RecentProjects />
+<div
           className="nav-btn-wrapper"
           style={{
             display: "flex",
@@ -278,48 +321,6 @@ export default function Home() {
             More Projects
           </NavLink>
         </div>
-
-      </section>
-
-      <div className="gold-line"></div>
-
-      {/* ---------------- WHY CHOOSE US ---------------- */}
-      <section className="choose-us py-5">
-        <div className="container">
-          <h2 className="section-title text-center mb-5">Why Choose Us</h2>
-          <div className="row g-4">
-            <div className="col-md-4">
-              <div className="choose-card">
-                <div className="choose-icon"><FiTool /></div>
-                <h5 className="choose-title">End to End Support</h5>
-                <p className="choose-desc">
-                  We help design and develop your product under one roof. We are the one-stop solution for design, development, and manufacturing your product enclosures and parts. With access to over 5 different technologies and 50+ different materials, we make design to production seamless.
-                </p>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div className="choose-card">
-                <div className="choose-icon"><FiStar /></div>
-                <h5 className="choose-title">Superior Finish</h5>
-                <p className="choose-desc">
-                  We have various types of finishes available to make your product stand out. Super fine Glossy finish, Matt finish with various color options are available. We also do electroplating to give a metallic gold and silver finish. Time to stop paying for low-quality products.
-                </p>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div className="choose-card">
-                <div className="choose-icon"><FiCpu /></div>
-                <h5 className="choose-title">Technical Expertise</h5>
-                <p className="choose-desc">
-                  With over 15 years of combined experience in manufacturing, we guide you with the best technology, material, and process to use for manufacturing your product. We also come up with innovative ways to address challenges. We ensure to balance cost and quality as per your requirements.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <div className="gold-line"></div>
       <Testimonials />
       <div className="gold-line"></div>

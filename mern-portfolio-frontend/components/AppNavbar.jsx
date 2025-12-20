@@ -5,9 +5,8 @@ import logo from "../src/assects/logo.png";
 const AppNavbar = () => {
   const links = [
     ["Home", "/"],
-    ["About", "/about"],
+    ["About Us", "/about"],
     ["Our Services", "/services"],
-    ["Process", "/process"],
     ["Contact us", "/get-in-touch"],
     // ["Admin", "/admin/login"],
   ];

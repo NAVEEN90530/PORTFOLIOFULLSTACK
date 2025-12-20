@@ -2,14 +2,11 @@ import mongoose from "mongoose";
 
 const linksSchema = new mongoose.Schema(
   {
-
-    links: {
-      facebook: { type: String, required: true },
-      twitter: { type: String, required: true },
-      instagram: { type: String, required: true },
-      linkedin: { type: String, required: true },
-      github: { type: String },
-    },
+    facebook: { type: String, required: true },
+    twitter: { type: String, required: true },
+    instagram: { type: String, required: true },
+    linkedin: { type: String, required: true },
+    github: { type: String },
   },
   { timestamps: true }
 );

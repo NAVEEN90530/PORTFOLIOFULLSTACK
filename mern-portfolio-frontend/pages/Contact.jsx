@@ -8,10 +8,12 @@ export default function Contact() {
       <div className="container">
         <h2 className="text-center mb-5" style={{ color: "#FFD700" }}>Let’s Start Manufacturing</h2>
 
-        <div className="d-flex flex-wrap justify-content-center gap-4">
+        <div className="d-flex flex-wrap-reverse justify-content-center gap-4">
+          
           <ContactInfo />
           <SendMessage />
         </div>
+
       </div>
     </section>
   );
