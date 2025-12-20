@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminNavbar from "../components/AdminSidebar";
 import About from "../pages/About";
@@ -33,6 +33,10 @@ const AdminLayout = ({ children }) => (
 );
 
 function App() {
+   useEffect(() => {
+    window.scrollTo(0, 0);  // Scrolls to the top of the page
+  }, []); 
+
   return (
     <BrowserRouter>
       {/* Toast notifications container */}
