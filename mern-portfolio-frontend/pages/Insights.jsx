@@ -110,7 +110,7 @@ export default function Insights() {
                       height: hoveredIndex === index ? "100%" : "120px",
                       display: "flex",
                       flexDirection: "column",
-                      justifyContent: hoveredIndex === index ? "center" : "flex-end",
+                      justifyContent: "center",
                       transition: "height 0.3s ease, justify-content 0.3s ease",
                     }}
                   >

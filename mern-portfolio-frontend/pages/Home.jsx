@@ -4,7 +4,6 @@ import API from "../api/api";
 import homebackground from "../src/assects/homebackground.jpeg";
 import homebackgrounddim from "../src/assects/homebackgrounddim.png";
 import { NavLink } from "react-router-dom";
-import { useSpring, animated } from '@react-spring/web';
 
 // Icons
 import { FiTool, FiSend, FiUsers, FiCheckCircle, FiCpu, FiStar } from "react-icons/fi";
@@ -242,6 +241,44 @@ export default function Home() {
         </h2>
 
         <Insights />
+        <div
+          className="nav-btn-wrapper"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "1rem",
+            marginTop: "2rem",
+            zIndex: 100,
+          }}
+        >
+          <NavLink
+            to="/services"
+            className="nav-btn nav-btn-outline"
+            style={{
+              padding: "1rem 2rem",
+              backgroundColor: "transparent",
+              border: "2px solid #FFD700",
+              borderRadius: "5px",
+              color: "#FFD700",
+              fontSize: "1.2rem",
+              textDecoration: "none",
+              fontWeight: "500",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FiTool
+              style={{
+                marginRight: 8,
+                fontSize: "1.3rem",
+                cursor: "pointer",
+              }}
+            />
+            More Projects
+          </NavLink>
+        </div>
+
       </section>
 
       <div className="gold-line"></div>

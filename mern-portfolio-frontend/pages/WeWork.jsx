@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Container, Button, NavLink } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import { Upload, FileText, Box, Scan, Download, Truck } from "lucide-react";
 import "../src/AuroxHowWeWork.css";
-import { FiSend, FiTool } from "react-icons/fi";
+
 
 const steps = [
   {
@@ -87,10 +87,10 @@ export default function AuroxHowWeWork() {
   return (
     <section className="aurox-work-section">
       <Container>
-        <h2 className="aurox-title text-center">How We Work</h2>
+        <h2 className="aurox-title mb-4 text-center">How We Work</h2>
        
 
-        <div className="aurox-progress-wrapper">
+        <div className="aurox-progress-wrapper mt-4">
           {/* Vertical Line */}
           <div className="aurox-progress-line">
             <div
@@ -122,17 +122,6 @@ export default function AuroxHowWeWork() {
           ))}
         </div>
 
-        <div className="nav-btn-wrapper">
-          <NavLink to="/projects" className="nav-btn nav-btn-outline">
-            <FiTool style={{ marginRight: 8, fontSize: "1.3rem" }} />
-            Explore our services
-          </NavLink>
-
-          <NavLink to="/touch" className="nav-btn nav-btn-filled">
-            <FiSend style={{ marginRight: 8, fontSize: "1.3rem" }} />
-            Let’s Connect
-          </NavLink>
-        </div>
       </Container>
     </section>
   );

@@ -60,7 +60,7 @@ export default function ProjectCard({ project, onClick }) {
             height: isHovered ? "100%" : "120px", 
             display: "flex",
             flexDirection: "column",
-            justifyContent: isHovered ? "center" : "flex-end", 
+            justifyContent: "center",
             transition: "height 0.3s ease, justify-content 0.3s ease",
           }}
         >
