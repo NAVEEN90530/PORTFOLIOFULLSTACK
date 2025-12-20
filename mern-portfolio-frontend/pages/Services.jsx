@@ -12,6 +12,12 @@ export default function Services() {
 
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    window.scrollTo(0, 0);  // Scrolls to the top of the page
+  }, []);  // Empty dependency array ensures this only runs once after the component mounts
+
+  
   useEffect(() => {
     API.get("/domains/with-categories")
       .then((res) => setDomains(res.data))

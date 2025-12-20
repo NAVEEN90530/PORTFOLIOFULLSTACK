@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
         <p>Your message:</p>
         <p style="padding: 10px; background-color: #f4f4f4; border-radius: 5px;">${message}</p>
         <br/>
-        <p>Thank you,<br/>Admin Team</p>
+        <p>Thank you,<br/>Aurox Team</p>
       </div>
     `;
 
@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
 
     res.status(201).json({ message: "Quote submitted successfully", quote });
   } catch (error) {
-    console.error("❌ Quote submission error:", error);
+    // console.error("❌ Quote submission error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });

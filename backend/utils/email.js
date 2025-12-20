@@ -22,9 +22,9 @@ const sendEmail = async (to, subject, message) => {
       html: message, 
     });
 
-    console.log("📩 Email sent successfully");
+    // console.log("📩 Email sent successfully");
   } catch (error) {
-    console.log("❌ Email send error:", error.message);
+    console.log("❌ Email not send error:", error.message);
   }
 };
 

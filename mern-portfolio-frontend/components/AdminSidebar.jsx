@@ -14,13 +14,14 @@ const handleLogout = async () => {
 const AdminNavbar = () => {
   const menuItems = [
     ["Dashboard", "/admin/dashboard"],
+    ["Domain", "/admin/domain"],
+    ["Category", "/admin/category"],
     ["Projects", "/admin/projects"],
     ["Testimonials", "/admin/testimonials"],
     ["Links", "/admin/links"],
     ["Stats", "/admin/stats"],
-    ["Category", "/admin/category"],
     ["Contacts", "/admin/contacts"],
-    ["Domain", "/admin/domain"],
+    
   ];
 
   // Common styles

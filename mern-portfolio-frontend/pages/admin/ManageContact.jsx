@@ -106,7 +106,12 @@ export default function ManageContact() {
       </h2>
 
       {/* FORM */}
-      <div className="card shadow p-4 card-container">
+      <div className="p-4 card-container"
+        style={{
+          backgroundColor: "var(--rich-black)",
+          borderRadius: "10px",
+          boxShadow: "0 2px 12px #FFD700",
+        }}>
         <form onSubmit={updateContact}>
           {/* Email */}
           <div className="mb-3">

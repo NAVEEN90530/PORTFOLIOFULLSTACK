@@ -66,7 +66,7 @@ export default function ManageTestimonials() {
   };
 
   return (
-    <div className="container py-4" style={{ marginLeft: "260px" }}>
+    <div className="container py-4">
       <h2
         className="text-center mb-4 fw-bold"
         style={{ color: "var(--button-gold)", textShadow: "0 0 10px rgba(212,175,55,0.6)" }}
@@ -79,7 +79,6 @@ export default function ManageTestimonials() {
         className="p-4 mb-4"
         style={{
           backgroundColor: "var(--rich-black)",
-          border: "1px solid var(--primary-gold)",
           borderRadius: "10px",
           boxShadow: "0 0 12px rgba(212,175,55,0.2)",
         }}

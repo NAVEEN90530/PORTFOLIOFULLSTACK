@@ -4,7 +4,7 @@ export default function ProjectCard({ project, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="col-md-4 mb-4">
+    <div className="col-md-4 g-5">
       <div
         style={{
           cursor: "pointer",

@@ -44,6 +44,10 @@ export default function Projects() {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);  // Scrolls to the top of the page
+  }, []);  // Empty dependency array ensures this only runs once after the component mounts
+
   const loadDomains = async () => {
     try {
       const res = await API.get("/domains");

@@ -13,6 +13,7 @@ import Insights from "./Insights";
 import ScrollFade from "./scroll";
 import AuroxHowWeWork from "./WeWork";
 import RecentProjects from "./RecentProject";
+import { FaCogs, FaSmile, FaTasks } from "react-icons/fa";
 
 export default function Home() {
 
@@ -23,6 +24,10 @@ export default function Home() {
   });
 
   const [loadingStats, setLoadingStats] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);  // Scrolls to the top of the page
+  }, []);  // Empty dependency array ensures this only runs once after the component mounts
 
 
   useEffect(() => {
@@ -47,7 +52,7 @@ export default function Home() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "0 1rem",
+          // padding: "0 1rem",
           textAlign: "center",
           color: "#FFD700",
           backgroundImage: `url(${homebackgrounddim})`,
@@ -99,7 +104,7 @@ export default function Home() {
               textShadow: "0 0 10px #000",
             }}
           >
-           Engineering Design Services
+            Engineering Design Services
           </h3>
 
           <p
@@ -188,7 +193,7 @@ export default function Home() {
         {!loadingStats ? (
           <div className="stats-wrapper" style={{ display: "flex", justifyContent: "space-around" }}>
             <div className="stat-box">
-              <FiUsers className="stat-icon" />
+              <FaSmile className="stat-icon" />
               <h2 aria-live="polite">
                 <CountUp start={0} end={stats.happyCustomers} duration={2} separator="," />
                 <span> +</span>
@@ -197,7 +202,7 @@ export default function Home() {
             </div>
 
             <div className="stat-box">
-              <FiCheckCircle className="stat-icon" />
+              <FaTasks className="stat-icon" />
               <h2 aria-live="polite">
                 <CountUp start={0} end={stats.projectsCompleted} duration={2} separator="," />
                 <span> +</span>
@@ -206,7 +211,7 @@ export default function Home() {
             </div>
 
             <div className="stat-box">
-              <FiCpu className="stat-icon" />
+              <FaCogs className="stat-icon" />
               <h2 aria-live="polite">
                 <CountUp start={0} end={stats.projectTechnologies} duration={2} separator="," />
                 <span> +</span>
@@ -229,7 +234,7 @@ export default function Home() {
 
       {/* ---------------- INSIGHTS SECTION ---------------- */}
       <section className="container py-5">
-        <h2 className="section-heading text-center" style={{ color: "#FFD700" }}>
+        <h2 className="section-heading text-center mb-5" style={{ color: "#FFD700" }}>
           Our Latest Insights
         </h2>
 
@@ -284,43 +289,43 @@ export default function Home() {
       {/* ---------------- RECENT PROJECTS ---------------- */}
 
       <RecentProjects />
-<div
-          className="nav-btn-wrapper"
+      <div
+        className="nav-btn-wrapper"
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "1rem",
+          marginTop: "2rem",
+          zIndex: 100,
+        }}
+      >
+        <NavLink
+          to="/services"
+          className="nav-btn nav-btn-outline"
           style={{
+            padding: "1rem 2rem",
+            backgroundColor: "transparent",
+            border: "2px solid #FFD700",
+            borderRadius: "5px",
+            color: "#FFD700",
+            fontSize: "1.2rem",
+            textDecoration: "none",
+            fontWeight: "500",
             display: "flex",
-            flexDirection: "row",
-            gap: "1rem",
-            marginTop: "2rem",
-            zIndex: 100,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <NavLink
-            to="/services"
-            className="nav-btn nav-btn-outline"
+          <FiTool
             style={{
-              padding: "1rem 2rem",
-              backgroundColor: "transparent",
-              border: "2px solid #FFD700",
-              borderRadius: "5px",
-              color: "#FFD700",
-              fontSize: "1.2rem",
-              textDecoration: "none",
-              fontWeight: "500",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              marginRight: 8,
+              fontSize: "1.3rem",
+              cursor: "pointer",
             }}
-          >
-            <FiTool
-              style={{
-                marginRight: 8,
-                fontSize: "1.3rem",
-                cursor: "pointer",
-              }}
-            />
-            More Projects
-          </NavLink>
-        </div>
+          />
+          More Projects
+        </NavLink>
+      </div>
       <div className="gold-line"></div>
       <Testimonials />
       <div className="gold-line"></div>

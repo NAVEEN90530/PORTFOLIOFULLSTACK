@@ -191,8 +191,8 @@ export default function ManageProjects() {
      UI
   ========================== */
   return (
-    <div className="container py-4" style={{ marginLeft: "260px" }}>
-      <h2 style={{ color: "#d4af37" }}>Manage Projects</h2>
+    <div className="container py-4">
+      <h2 className="text-center" style={{ color: "#d4af37" }}>Manage Projects</h2>
 
       {/* CREATE FORM */}
       <form className="row g-3 mt-3" onSubmit={handleCreate}>
@@ -306,7 +306,7 @@ export default function ManageProjects() {
         </div>
       </form>
 
-      <hr />
+      <div className="gold-line"></div>
 
       {/* FILTER */}
       <select
