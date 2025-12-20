@@ -16,7 +16,6 @@ import RecentProjects from "./RecentProject";
 import { FaCogs, FaSmile, FaTasks } from "react-icons/fa";
 
 export default function Home() {
-
   const [stats, setStats] = useState({
     happyCustomers: 0,
     projectsCompleted: 0,
@@ -26,23 +25,18 @@ export default function Home() {
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
-    window.scrollTo(0, 0);  // Scrolls to the top of the page
-  }, []);  // Empty dependency array ensures this only runs once after the component mounts
-
+    window.scrollTo(0, 0); // Scroll to the top when the component mounts
+  }, []); // Empty dependency array ensures this only runs once
 
   useEffect(() => {
-
-
     API.get("/settings")
       .then((res) => setStats(res.data?.stats || {}))
       .catch(console.error)
-      .finally(() => setLoadingStats(false));
+      .finally(() => setLoadingStats(false)); // Once data is fetched, stop loading
   }, []);
-
 
   return (
     <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
-
       {/* ---------------- HERO SECTION ---------------- */}
       <div
         style={{
@@ -52,11 +46,9 @@ export default function Home() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          // padding: "0 1rem",
           textAlign: "center",
           color: "#FFD700",
           backgroundImage: `url(${homebackgrounddim})`,
-          // backgroundImage: `url(${homebackground})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -68,7 +60,7 @@ export default function Home() {
           style={{
             maxWidth: "800px",
             padding: "2rem",
-            borderRadius: "10px", // Optional for a more modern look
+            borderRadius: "10px",
             zIndex: 100,
           }}
         >
@@ -185,9 +177,6 @@ export default function Home() {
         </div>
       </div>
 
-
-
-
       {/* ---------------- STATS SECTION ---------------- */}
       <div className="container py-5">
         {!loadingStats ? (
@@ -195,7 +184,13 @@ export default function Home() {
             <div className="stat-box">
               <FaSmile className="stat-icon" />
               <h2 aria-live="polite">
-                <CountUp start={0} end={stats.happyCustomers} duration={2} separator="," />
+                <CountUp
+                  key={stats.happyCustomers} // This will ensure CountUp animates every time the value changes
+                  start={0}
+                  end={stats.happyCustomers}
+                  duration={2}
+                  separator=","
+                />
                 <span> +</span>
               </h2>
               <p>Happy Customers</p>
@@ -204,7 +199,13 @@ export default function Home() {
             <div className="stat-box">
               <FaTasks className="stat-icon" />
               <h2 aria-live="polite">
-                <CountUp start={0} end={stats.projectsCompleted} duration={2} separator="," />
+                <CountUp
+                  key={stats.projectsCompleted} // This will ensure CountUp animates every time the value changes
+                  start={0}
+                  end={stats.projectsCompleted}
+                  duration={2}
+                  separator=","
+                />
                 <span> +</span>
               </h2>
               <p>Projects Completed</p>
@@ -213,7 +214,13 @@ export default function Home() {
             <div className="stat-box">
               <FaCogs className="stat-icon" />
               <h2 aria-live="polite">
-                <CountUp start={0} end={stats.projectTechnologies} duration={2} separator="," />
+                <CountUp
+                  key={stats.projectTechnologies} // This will ensure CountUp animates every time the value changes
+                  start={0}
+                  end={stats.projectTechnologies}
+                  duration={2}
+                  separator=","
+                />
                 <span> +</span>
               </h2>
               <p>Project Technologies</p>
@@ -221,14 +228,13 @@ export default function Home() {
           </div>
         ) : (
           <div className="skeleton-loader">
-            {/* Here you can use a skeleton loader for better UX */}
+            {/* Skeleton loader */}
             <div className="skeleton-box"></div>
             <div className="skeleton-box"></div>
             <div className="skeleton-box"></div>
           </div>
         )}
       </div>
-
 
       <div className="gold-line"></div>
 
@@ -239,7 +245,6 @@ export default function Home() {
         </h2>
 
         <Insights />
-
       </section>
 
       <div className="gold-line"></div>
@@ -251,7 +256,9 @@ export default function Home() {
           <div className="row g-4">
             <div className="col-md-4">
               <div className="choose-card">
-                <div className="choose-icon"><FiTool /></div>
+                <div className="choose-icon">
+                  <FiTool />
+                </div>
                 <h5 className="choose-title">End to End Support</h5>
                 <p className="choose-desc">
                   We help design and develop your product under one roof. We are the one-stop solution for design, development, and manufacturing your product enclosures and parts. With access to over 5 different technologies and 50+ different materials, we make design to production seamless.
@@ -261,7 +268,9 @@ export default function Home() {
 
             <div className="col-md-4">
               <div className="choose-card">
-                <div className="choose-icon"><FiStar /></div>
+                <div className="choose-icon">
+                  <FiStar />
+                </div>
                 <h5 className="choose-title">Superior Finish</h5>
                 <p className="choose-desc">
                   We have various types of finishes available to make your product stand out. Super fine Glossy finish, Matt finish with various color options are available. We also do electroplating to give a metallic gold and silver finish. Time to stop paying for low-quality products.
@@ -271,7 +280,9 @@ export default function Home() {
 
             <div className="col-md-4">
               <div className="choose-card">
-                <div className="choose-icon"><FiCpu /></div>
+                <div className="choose-icon">
+                  <FiCpu />
+                </div>
                 <h5 className="choose-title">Technical Expertise</h5>
                 <p className="choose-desc">
                   Combined experience in manufacturing, we guide you with the best technology, material, and process to use for manufacturing your product. We also come up with innovative ways to address challenges. We ensure to balance cost and quality as per your requirements.
@@ -287,7 +298,6 @@ export default function Home() {
       <div className="gold-line"></div>
 
       {/* ---------------- RECENT PROJECTS ---------------- */}
-
       <RecentProjects />
       <div
         className="nav-btn-wrapper"
