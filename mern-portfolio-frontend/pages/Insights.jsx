@@ -62,7 +62,7 @@ export default function Insights() {
                 height: "300px",
                 width: "100%",
                 overflow: "hidden",
-                backgroundColor: "#111111",
+                // backgroundColor: "#111111",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 position: "relative",
                 transform: hoveredIndex === index ? "scale(1.03)" : "scale(1)",

@@ -3,6 +3,7 @@ import CountUp from "react-countup";
 import API from "../api/api";
 import homebackground from "../src/assects/homebackground.jpeg";
 import homebackgrounddim from "../src/assects/homebackgrounddim.png";
+import opacity1 from "../src/assects/opacity 1.jpeg";
 import { NavLink } from "react-router-dom";
 
 // Icons
@@ -36,7 +37,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh" }}>
       {/* ---------------- HERO SECTION ---------------- */}
       <div
         style={{
@@ -178,7 +179,7 @@ export default function Home() {
       </div>
 
       {/* ---------------- STATS SECTION ---------------- */}
-      <div className="container py-5">
+      <div className="container py-5" background={opacity1} >
         {!loadingStats ? (
           <div className="stats-wrapper" style={{ display: "flex", justifyContent: "space-around" }}>
             <div className="stat-box">

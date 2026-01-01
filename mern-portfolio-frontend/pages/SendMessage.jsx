@@ -3,7 +3,8 @@ import API from "../api/api";
 import { toast } from "react-toastify";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
+import DOMPurify from 'dompurify';
+import validator from 'validator';
 
 export default function SendMessage() {
     const [form, setForm] = useState({
@@ -15,7 +16,7 @@ export default function SendMessage() {
     });
 
     const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(false); // ✅ loading state
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -24,6 +25,7 @@ export default function SendMessage() {
                 setCategories(res.data);
             } catch (err) {
                 console.error("Failed to fetch Domain:", err);
+                toast.error("Failed to load categories. Please try again later.");
             }
         };
 
@@ -32,23 +34,40 @@ export default function SendMessage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // start loading
+        setLoading(true);
+        
+        // Client-side validation
+        if (!validator.isEmail(form.email)) {
+            toast.error("Please enter a valid email address.");
+            setLoading(false);
+            return;
+        }
+
+        if (form.phone && !validator.isMobilePhone(form.phone)) {
+            toast.error("Please enter a valid phone number.");
+            setLoading(false);
+            return;
+        }
+
+        const sanitizedMessage = DOMPurify.sanitize(form.message); // sanitize message
+
         try {
-            await API.post("/quotes", form);
+            await API.post("/quotes", { ...form, message: sanitizedMessage });
             toast.success("Quote submitted successfully!");
             setForm({
                 name: "",
                 email: "",
                 phone: "",
-                category: "",
+                domain: "",
                 message: "",
             });
         } catch (error) {
             toast.error("Failed to submit quote.");
         } finally {
-            setLoading(false); // stop loading
+            setLoading(false);
         }
     };
+
     useEffect(() => {
         AOS.init({
             duration: 40000,
@@ -75,15 +94,14 @@ export default function SendMessage() {
                 boxShadow: "2px 4px 12px #FFD700",
                 margin: "0 auto",
             }}
-
         >
             <h3 style={{ color: "#FFD700", marginBottom: "20px" }}>Get In Touch</h3>
-
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
                 <div className="mb-3">
-                    <label className="form-label">Name</label>
+                    <label htmlFor="name" className="form-label">Name</label>
                     <input
                         type="text"
+                        id="name"
                         className="form-control"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -92,9 +110,10 @@ export default function SendMessage() {
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">Email</label>
+                    <label htmlFor="email" className="form-label">Email</label>
                     <input
                         type="email"
+                        id="email"
                         className="form-control"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -103,9 +122,10 @@ export default function SendMessage() {
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">Phone</label>
+                    <label htmlFor="phone" className="form-label">Phone</label>
                     <input
                         type="tel"
+                        id="phone"
                         className="form-control"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
@@ -113,15 +133,16 @@ export default function SendMessage() {
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">Domain</label>
+                    <label htmlFor="domain" className="form-label">Domain</label>
                     <select
+                        id="domain"
                         className="form-control"
                         value={form.domain}
                         onChange={(e) => setForm({ ...form, domain: e.target.value })}
                         required
                         style={{
-                            backgroundColor: "#1A1A1A", // dark background
-                            color: "#FFD700",           // gold text
+                            backgroundColor: "#1A1A1A",
+                            color: "#FFD700",
                             padding: "8px",
                             outline: "none",
                         }}
@@ -135,10 +156,10 @@ export default function SendMessage() {
                     </select>
                 </div>
 
-
                 <div className="mb-3">
-                    <label className="form-label">Message</label>
+                    <label htmlFor="message" className="form-label">Message</label>
                     <textarea
+                        id="message"
                         rows="5"
                         className="form-control"
                         value={form.message}
@@ -152,9 +173,14 @@ export default function SendMessage() {
                     className="btn-submit btn btn-pill"
                     disabled={loading}
                 >
-                    {loading ? "Sending..." : "Send Message"}
+                    {loading ? (
+                        <div className="spinner-border text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    ) : (
+                        "Send Message"
+                    )}
                 </button>
-
             </form>
         </div>
     );

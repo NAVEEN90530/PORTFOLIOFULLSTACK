@@ -20,7 +20,8 @@
    BASE STYLES
 ================================ */
 body {
-  background-color: var(--rich-black);
+  /* background-color: var(--rich-black); */
+  background-image: url(./assects/opacity\ 1.jpeg);
   font-family: "Poppins", sans-serif;
   color: var(--text-light);
 }

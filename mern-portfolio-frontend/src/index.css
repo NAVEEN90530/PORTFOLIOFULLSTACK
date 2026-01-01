@@ -24,11 +24,15 @@
 /* ===============================
    BASE STYLES
 ================================ */
+
 body {
-  background-color: var(--rich-black);
+  background-image: url(./assects/opacity\ 2.jpeg);
+  background-size: contain; /* Ensures the image covers the whole screen */
+  /* background-repeat: no-repeat; */
   font-family: "Book Antiqua", "Palatino", serif;
   color: var(--text-light);
 }
+
 
 .page-container {
   padding: 60px 0;
