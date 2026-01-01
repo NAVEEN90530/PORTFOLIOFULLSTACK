@@ -20,6 +20,7 @@ export default function ProjectCard({ project, onClick }) {
         }}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
+        onClick={() => onClick(project)} // Trigger modal on click
       >
         {/* IMAGE */}
         <div
@@ -128,7 +129,6 @@ export default function ProjectCard({ project, onClick }) {
           {/* "KNOW MORE" BUTTON */}
           {isHovered && (
             <button
-              onClick={() => onClick(project)} // Trigger modal with the project
               style={{
                 backgroundColor: "#FFD700",
                 color: "#1A1A1A",

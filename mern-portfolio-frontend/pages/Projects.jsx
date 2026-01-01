@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../api/api";
-import ProjectModal from "../components/ProjectModal";
 import ProjectCard from "../components/ProjectCard";
+import ProjectModal from "../components/ProjectModal";
 import Insights from "./Insights";
 
 export default function Projects() {
@@ -12,6 +12,7 @@ export default function Projects() {
   const [filterCategory, setFilterCategory] = useState("all");
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [error, setError] = useState(null);
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -39,6 +40,10 @@ export default function Projects() {
     const domainFromQuery = params.get("domain") || "";
     const categoryFromQuery = params.get("category") || "all";
 
+    // Debugging the URL parameters:
+    console.log("Domain from URL:", domainFromQuery);
+    console.log("Category from URL:", categoryFromQuery);
+
     setFilterDomain(domainFromQuery);
     setFilterCategory(categoryFromQuery);
 
@@ -47,9 +52,14 @@ export default function Projects() {
 
   // Load Projects based on domain and category
   const loadProjects = async (domain = "", category = "all") => {
+    console.log("Loading projects with domain:", domain, "and category:", category); // Debugging
     try {
       setLoadingProjects(true);
       const res = await API.get("/projects", { params: { domain, category } });
+      
+      // Debugging the API response:
+      console.log("Projects loaded:", res.data);
+
       setProjects(res.data);
     } catch (err) {
       console.error("Failed to fetch projects:", err);
@@ -60,13 +70,18 @@ export default function Projects() {
   };
 
   // Filter categories based on selected domain
-  const filteredCategories = domainsWithCategories.find(
-    (domain) => domain.slug === filterDomain
-  )?.categories || [];
+  useEffect(() => {
+    if (filterDomain) {
+      const domain = domainsWithCategories.find((d) => d.slug === filterDomain);
+      setCategoryOptions(domain ? domain.categories : []);
+    }
+  }, [filterDomain, domainsWithCategories]);
 
   // Handles when domain is changed
   const handleDomainChange = (e) => {
     const newDomain = e.target.value;
+    console.log("Domain selected:", newDomain); // Debugging domain change
+
     setFilterDomain(newDomain);
     setFilterCategory("all"); // reset category when domain changes
     navigate(`/projects?domain=${newDomain}`); // Update URL with domain
@@ -75,8 +90,22 @@ export default function Projects() {
   // Handles when category is changed
   const handleCategoryChange = (e) => {
     const newCategorySlug = e.target.value;
+    console.log("Category selected:", newCategorySlug); // Debugging category change
+
     setFilterCategory(newCategorySlug);
     navigate(`/projects?domain=${filterDomain}&category=${newCategorySlug}`); // Update URL with category
+  };
+
+  // Open Project Modal
+  const openModal = (project) => {
+    setSelectedProject(project);
+    setShowModal(true);
+  };
+
+  // Close Project Modal
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedProject(null);
   };
 
   return (
@@ -89,49 +118,39 @@ export default function Projects() {
 
       {error && <p className="text-danger text-center">{error}</p>}
 
-      {/* Display selected category name */}
-      <div className="text-center mb-4">
-        <h4>Category: {filterCategory !== "all" ? filterCategory : "All Categories"}</h4>
-      </div>
-
       {/* Filters Container */}
-      <div className="d-flex flex-wrap justify-content-between mb-5 align-items-center">
-        {/* Domain Filter */}
-        <div className="d-flex gap-2 align-items-center">
-          <label className="text-light mb-0 fw-bold">Domain:</label>
+      <div className="row mb-3">
+        <div className="col-md-3 mb-2">
+          <label className="form-label text-light">Filter by Domain:</label>
           <select
-            className="form-select form-select-sm"
+            className="form-control bg-dark text-light border-0"
             value={filterDomain}
             onChange={handleDomainChange}
+            style={{ padding: "10px", borderRadius: "8px" }}
           >
             <option value="">All Domains</option>
-            {domainsWithCategories.map((domain) => (
-              <option key={domain._id} value={domain.slug}>
-                {domain.name}
+            {domainsWithCategories.map((d) => (
+              <option key={d._id} value={d.slug}>
+                {d.name}
               </option>
             ))}
           </select>
         </div>
 
-        {/* Category Filter */}
-        <div className="d-flex gap-2 align-items-center">
-          <label className="text-light mb-0 fw-bold">Category:</label>
+        <div className="col-md-3 mb-2">
+          <label className="form-label text-light">Filter by Category:</label>
           <select
-            className="form-select form-select-sm"
+            className="form-control bg-dark text-light border-0"
             value={filterCategory}
             onChange={handleCategoryChange}
-            disabled={!filterDomain} // Disable category select if no domain is selected
+            style={{ padding: "10px", borderRadius: "8px" }}
           >
             <option value="all">All Categories</option>
-            {filteredCategories.length === 0 ? (
-              <option value="all">No categories available</option>
-            ) : (
-              filteredCategories.map((cat) => (
-                <option key={cat._id} value={cat.slug}>
-                  {cat.name}
-                </option>
-              ))
-            )}
+            {categoryOptions.map((category) => (
+              <option key={category._id} value={category.slug}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -144,10 +163,17 @@ export default function Projects() {
       ) : (
         <div className="row">
           {projects.map((p) => (
-            <ProjectCard key={p._id} project={p} />
+            <ProjectCard key={p._id} project={p} onClick={openModal} />
           ))}
         </div>
       )}
+
+      {/* Project Modal */}
+      <ProjectModal
+        showModal={showModal}
+        closeModal={closeModal}
+        selectedProject={selectedProject}
+      />
     </div>
   );
 }

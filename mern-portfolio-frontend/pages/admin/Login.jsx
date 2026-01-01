@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👈 import icons
+import DOMPurify from "dompurify"; // 👈 import DOMPurify
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,8 +18,12 @@ export default function Login() {
     setError("");
     setLoading(true);
 
+    // Sanitize inputs using DOMPurify
+    const sanitizedUsername = DOMPurify.sanitize(form.username);
+    const sanitizedPassword = DOMPurify.sanitize(form.password);
+
     try {
-      await API.post("/auth/login", form);
+      await API.post("/auth/login", { username: sanitizedUsername, password: sanitizedPassword });
 
       toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
 

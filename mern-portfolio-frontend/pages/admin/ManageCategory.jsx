@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faPlus, faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Modal, Button } from "react-bootstrap";
+import DOMPurify from "dompurify"; // 👈 Import DOMPurify
 
 const ManageCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -86,13 +87,18 @@ const ManageCategory = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !domain || (!imageUrl && !editingId)) {
+
+    // Sanitize user inputs before submitting
+    const sanitizedName = DOMPurify.sanitize(name);
+    const sanitizedDescription = DOMPurify.sanitize(description);
+
+    if (!sanitizedName || !domain || (!imageUrl && !editingId)) {
       toast.error("All fields required");
       return;
     }
 
     try {
-      const payload = { name, domain, imageUrl, description };
+      const payload = { name: sanitizedName, domain, imageUrl, description: sanitizedDescription };
       if (editingId) {
         await updateCategory(editingId, payload);
         toast.success("Category updated");

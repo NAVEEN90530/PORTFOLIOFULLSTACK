@@ -9,9 +9,10 @@ export default function ProjectModal({ showModal, closeModal, selectedProject })
       centered
       size="lg"
       aria-labelledby="project-modal-title"
+      role="dialog" // For better accessibility
     >
       <Modal.Header closeButton style={{ backgroundColor: "#1A1A1A", color: "#FFD700" }}>
-        <Modal.Title id="project-modal-title" className="text-center" >
+        <Modal.Title id="project-modal-title" className="text-center">
           {selectedProject?.name || "Untitled Project"}
         </Modal.Title>
       </Modal.Header>
@@ -21,8 +22,8 @@ export default function ProjectModal({ showModal, closeModal, selectedProject })
           <>
             {/* Project Image */}
             <img
-              src={selectedProject.imageUrl || "/placeholder.png"}
-              alt={selectedProject.name || "Project Image"}
+              src={selectedProject.imageUrl || "/placeholder.png"} // Using fallback image
+              alt={selectedProject.name || "Project Image"} // Alt text for accessibility
               className="img-fluid rounded mb-3"
               style={{ maxHeight: "300px", objectFit: "cover" }}
             />
