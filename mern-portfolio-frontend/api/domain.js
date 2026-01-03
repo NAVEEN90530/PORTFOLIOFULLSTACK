@@ -1,18 +1,14 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/domains";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/domains`;
 
-/* ===============================
-   LIST DOMAINS
-================================ */
+// LIST DOMAINS
 export const listDomains = async () => {
   const response = await axios.get(API_URL);
   return response.data;
 };
 
-/* ===============================
-   CREATE DOMAIN (ADMIN)
-================================ */
+// CREATE DOMAIN
 export const createDomain = async (data) => {
   const response = await axios.post(API_URL, data, {
     withCredentials: true,
@@ -20,9 +16,7 @@ export const createDomain = async (data) => {
   return response.data;
 };
 
-/* ===============================
-   UPDATE DOMAIN
-================================ */
+// UPDATE DOMAIN
 export const updateDomain = async (id, data) => {
   const response = await axios.put(`${API_URL}/${id}`, data, {
     withCredentials: true,
@@ -30,9 +24,7 @@ export const updateDomain = async (id, data) => {
   return response.data;
 };
 
-/* ===============================
-   DELETE DOMAIN
-================================ */
+// DELETE DOMAIN
 export const deleteDomain = async (id) => {
   const response = await axios.delete(`${API_URL}/${id}`, {
     withCredentials: true,
