@@ -3,6 +3,7 @@ import API from "../../api/api.js";
 import { toast } from "react-toastify";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { FaSmile, FaTasks, FaCogs } from "react-icons/fa";
+import DOMPurify from "dompurify"; // Import DOMPurify for sanitization
 
 const COLORS = {
   background: "#111",
@@ -30,7 +31,13 @@ export default function ManageStats() {
     API.get("/settings")
       .then((res) => {
         if (res.data.stats) {
-          setStatsget(res.data.stats);
+          // Sanitize the incoming data to avoid XSS
+          const sanitizedStats = {
+            happyCustomers: DOMPurify.sanitize(res.data.stats.happyCustomers),
+            projectsCompleted: DOMPurify.sanitize(res.data.stats.projectsCompleted),
+            projectTechnologies: DOMPurify.sanitize(res.data.stats.projectTechnologies),
+          };
+          setStatsget(sanitizedStats);
         }
       })
       .catch(() => {
@@ -55,7 +62,14 @@ export default function ManageStats() {
     }
 
     try {
-      await API.put("/settings/stats", stats);
+      // Sanitize the outgoing stats data before sending to the server
+      const sanitizedStats = {
+        happyCustomers: DOMPurify.sanitize(happyCustomers),
+        projectsCompleted: DOMPurify.sanitize(projectsCompleted),
+        projectTechnologies: DOMPurify.sanitize(projectTechnologies),
+      };
+
+      await API.put("/settings/stats", sanitizedStats);
       toast.success("Stats updated successfully!");
       loadStats();
       setStats({ happyCustomers: "", projectsCompleted: "", projectTechnologies: "" });
@@ -83,14 +97,14 @@ export default function ManageStats() {
       >
         <div className="row g-4">
           <div className="col-md-4">
-            <label className="form-label text-light">Happy Customers</label>
+            <label className="form-label" style={{ color: COLORS.highlight }} >Happy Customers</label>
             <input
               type="number"
-              className="form-control bg-dark text-light border-0"
+              className="form-control form-control-lg shadow-sm rounded-3"
               placeholder="Happy Customers"
               value={stats.happyCustomers}
               onChange={(e) => setStats({ ...stats, happyCustomers: e.target.value })}
-              style={{
+               style={{
                 backgroundColor: COLORS.background,
                 color: COLORS.text,
                 borderColor: COLORS.highlight,
@@ -98,6 +112,7 @@ export default function ManageStats() {
                 padding: "10px",
               }}
             />
+
           </div>
 
           <div className="col-md-4">

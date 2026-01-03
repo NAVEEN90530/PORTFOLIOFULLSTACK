@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faSave, faTimes, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Container, Row, Col, Card, Button, Modal, Spinner } from "react-bootstrap";
+import DOMPurify from "dompurify"; // Import DOMPurify for sanitizing
 
 export default function ManageDomain() {
   const [domains, setDomains] = useState([]);
@@ -41,6 +42,12 @@ export default function ManageDomain() {
     loadDomains();
   }, []);
 
+  // Sanitize inputs before submission
+  const sanitizeInput = (input) => {
+    return DOMPurify.sanitize(input); // Sanitize text inputs
+  };
+
+  // Handle image upload
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -56,19 +63,29 @@ export default function ManageDomain() {
     reader.onloadend = () => setForm({ ...form, imageUrl: reader.result });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!form.name || (!form.imageUrl && !editId)) {
       return toast.warning("Name & image required");
     }
 
+    // Sanitize the form fields
+    const sanitizedForm = {
+      name: sanitizeInput(form.name),
+      imageUrl: form.imageUrl,
+      description: sanitizeInput(form.description),
+      whyChoose: form.whyChoose.map((point) => sanitizeInput(point)),
+    };
+
     setLoading(true);
     try {
       if (editId) {
-        await API.put(`/domains/${editId}`, form);
+        await API.put(`/domains/${editId}`, sanitizedForm);
         toast.success("Domain updated");
       } else {
-        await API.post("/domains", form);
+        await API.post("/domains", sanitizedForm);
         toast.success("Domain created");
       }
       setForm({ name: "", imageUrl: "", description: "", whyChoose: [] });
@@ -123,10 +140,10 @@ export default function ManageDomain() {
           <div className="col-md-4">
             <label htmlFor="domainName" className="form-label text-light">Domain Name</label>
             <input 
-            id="domainName" 
-            className="form-control bg-dark text-light border-0" 
-            placeholder="Domain Name" 
-            value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              id="domainName" 
+              className="form-control bg-dark text-light border-0" 
+              placeholder="Domain Name" 
+              value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </div>
 
           {/* Image Upload */}

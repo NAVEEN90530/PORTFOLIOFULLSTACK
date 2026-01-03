@@ -3,7 +3,7 @@ import CountUp from "react-countup";
 import API from "../api/api";
 import homebackground from "../src/assects/homebackground.jpeg";
 import homebackgrounddim from "../src/assects/homebackgrounddim.png";
-import opacity1 from "../src/assects/opacity 1.jpeg";
+import opacity1 from "../src/assects/opacity1.jpeg";
 import { NavLink } from "react-router-dom";
 
 // Icons

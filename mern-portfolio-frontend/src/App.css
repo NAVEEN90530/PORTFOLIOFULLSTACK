@@ -21,7 +21,7 @@
 ================================ */
 body {
   /* background-color: var(--rich-black); */
-  background-image: url(./assects/opacity\ 1.jpeg);
+  background-image: url(./assects/opacity1.jpeg);
   font-family: "Poppins", sans-serif;
   color: var(--text-light);
 }

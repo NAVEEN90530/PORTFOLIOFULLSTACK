@@ -26,7 +26,7 @@
 ================================ */
 
 body {
-  background-image: url(./assects/opacity\ 2.jpeg);
+  background-image: url(./assects/opacity2.jpeg);
   background-size: contain; /* Ensures the image covers the whole screen */
   /* background-repeat: no-repeat; */
   font-family: "Book Antiqua", "Palatino", serif;

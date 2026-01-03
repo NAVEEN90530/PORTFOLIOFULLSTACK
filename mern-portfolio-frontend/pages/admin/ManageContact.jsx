@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../../api/api.js";
 import { toast } from "react-toastify";
+import DOMPurify from "dompurify"; // Import DOMPurify for sanitizing
 import "font-awesome/css/font-awesome.min.css"; // Importing FontAwesome icons
 
 export default function ManageContact() {
@@ -66,6 +67,23 @@ export default function ManageContact() {
     return true;
   };
 
+  // Sanitize inputs (email, phone, address)
+  const sanitizeInput = (input, type) => {
+    if (type === "email") {
+      // Sanitize email (basic, already validated)
+      return DOMPurify.sanitize(input);
+    }
+    if (type === "phone") {
+      // Sanitize phone number (remove unwanted characters)
+      return input.replace(/[^0-9+\-() ]/g, '');
+    }
+    if (type === "address") {
+      // Sanitize address (removes any dangerous HTML tags)
+      return DOMPurify.sanitize(input);
+    }
+    return input;
+  };
+
   // Update contact info
   const updateContact = async (e) => {
     e.preventDefault();
@@ -76,8 +94,15 @@ export default function ManageContact() {
     setError(""); // Reset error
 
     try {
-      await API.put("/settings/contact", form);
-      setContact(form); // Update UI
+      // Sanitize the inputs before sending to the API
+      const sanitizedForm = {
+        email: sanitizeInput(form.email, "email"),
+        phone: sanitizeInput(form.phone, "phone"),
+        address: sanitizeInput(form.address, "address"),
+      };
+
+      await API.put("/settings/contact", sanitizedForm);
+      setContact(sanitizedForm); // Update UI
 
       toast.success("Contact information updated successfully!");
     } catch (err) {
@@ -100,18 +125,20 @@ export default function ManageContact() {
 
   return (
     <div className="container py-4" style={{ maxWidth: "700px" }}>
-      <h2 className="text-center mb-4" >
+      <h2 className="text-center mb-4">
         <i className="fas fa-address-book" style={{ marginRight: "10px" }}></i>
         Manage Contact Information
       </h2>
 
       {/* FORM */}
-      <div className="p-4 card-container"
+      <div
+        className="p-4 card-container"
         style={{
           backgroundColor: "var(--rich-black)",
           borderRadius: "10px",
           boxShadow: "0 2px 12px #FFD700",
-        }}>
+        }}
+      >
         <form onSubmit={updateContact}>
           {/* Email */}
           <div className="mb-3">
@@ -190,7 +217,15 @@ export default function ManageContact() {
       </div>
 
       {/* LIVE DISPLAY */}
-      <div className="mt-4 p-3" style={{ backgroundColor: "#111", borderRadius: "10px", border: "1px solid #FFD700", color: "#EDEDED" }}>
+      <div
+        className="mt-4 p-3"
+        style={{
+          backgroundColor: "#111",
+          borderRadius: "10px",
+          border: "1px solid #FFD700",
+          color: "#EDEDED",
+        }}
+      >
         <h4 style={{ color: "#FFD700" }}>Current Contact Info</h4>
         <p><strong>Email:</strong> {contact.email}</p>
         <p><strong>Phone:</strong> {contact.phone}</p>

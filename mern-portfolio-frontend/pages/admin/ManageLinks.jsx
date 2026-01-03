@@ -3,6 +3,7 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import axios from "axios";
 import { toast } from "react-toastify";
+import DOMPurify from "dompurify"; // Import DOMPurify
 
 export default function ManageLinks() {
   const [links, setLinks] = useState({
@@ -16,24 +17,23 @@ export default function ManageLinks() {
   const [loading, setLoading] = useState(false);
   const API_BASE = import.meta.env.VITE_API_URL;
 
+  // Fetch the current links from the backend
+  const fetchLinks = async () => {
+    try {
+      const res = await axios.get(`${API_BASE}/links`, { withCredentials: true });
+      if (res.data && res.data.links) {
+        setLinks(res.data.links);  // Update with actual data from the backend
+      }
+    } catch (err) {
+      toast.error("Failed to load links");
+      console.error(err);
+    }
+  };
+
   // Fetch links when the component is mounted
   useEffect(() => {
-    fetchLinks();
+    fetchLinks();  // Fetch initial data when component loads
   }, []);
-
- // Fetch the current links from the backend
-const fetchLinks = async () => {
-  try {
-    const res = await axios.get(`${API_BASE}/links`, { withCredentials: true });
-    if (res.data && res.data.links) {
-      setLinks(res.data.links);  // Only set the links object
-    }
-  } catch (err) {
-    toast.error("Failed to load links");
-    console.error(err);
-  }
-};
-
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -55,12 +55,15 @@ const fetchLinks = async () => {
     };
 
     try {
+      // Send the PUT request to update the links
       const res = await axios.put(`${API_BASE}/links`, linksToUpdate, { withCredentials: true });
 
       // If the update is successful, fetch the updated links again
       if (res.data && res.data.links) {
         setLinks(res.data.links);
         toast.success("Links updated successfully!");
+        // Fetch the real data from the server after updating
+        fetchLinks();  // Ensure that the latest data is fetched and displayed
       } else {
         toast.error("Failed to update links");
       }
@@ -79,6 +82,15 @@ const fetchLinks = async () => {
     { key: "linkedin", placeholder: "LinkedIn URL", icon: <FaLinkedin size={20} /> },
     { key: "github", placeholder: "GitHub URL", icon: <FaGithub size={20} /> },
   ];
+
+  // Sanitize the content before displaying it
+  const sanitizeLink = (link) => {
+    // If the link is valid, sanitize it
+    if (link && typeof link === 'string' && link.trim() !== '') {
+      return DOMPurify.sanitize(link);
+    }
+    return '';  // Return an empty string if link is invalid
+  };
 
   return (
     <div className="container py-4" style={{ maxWidth: "800px" }}>
@@ -138,30 +150,28 @@ const fetchLinks = async () => {
       </div>
 
       {/* Preview Section */}
-<h4 style={{ color: "#FFD700", marginBottom: "12px" }}>Preview Links</h4>
-<div
-  className="social-links"
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    color: "#EDEDED",
-  }}
->
-  {Object.entries(links).map(([key, value]) => (
-    // Exclude _id and updatedAt and ensure the link is valid
-    (key !== "_id" && key !== "updatedAt" && value && typeof value === "string" && value.trim() !== "") && (
-      <div key={key}>
-        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
-        <a href={value} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
-          {value}
-        </a>
+      <h4 style={{ color: "#FFD700", marginBottom: "12px" }}>Preview Links</h4>
+      <div
+        className="social-links"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          color: "#EDEDED",
+        }}
+      >
+        {Object.entries(links).map(([key, value]) => (
+          // Exclude _id and updatedAt and ensure the link is valid
+          (key !== "_id" && key !== "updatedAt" && value && typeof value === "string" && value.trim() !== "") && (
+            <div key={key}>
+              <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
+              <a href={sanitizeLink(value)} target="_blank" rel="noopener noreferrer" style={{ color: "#FFD700" }}>
+                {sanitizeLink(value)}
+              </a>
+            </div>
+          )
+        ))}
       </div>
-    )
-  ))}
-</div>
-
-
     </div>
   );
 }

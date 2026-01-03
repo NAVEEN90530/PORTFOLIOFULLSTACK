@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import API from "../../api/api";
 import { listCategories } from "../../api/category";
 import { listDomains } from "../../api/domain";
+import DOMPurify from "dompurify"; // Import DOMPurify for sanitization
 
 export default function ManageProjects() {
   const [projects, setProjects] = useState([]);
@@ -86,6 +87,13 @@ export default function ManageProjects() {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Basic validation for image types (JPG, PNG)
+    const validTypes = ['image/jpeg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      toast.error("Only .jpg and .png images are allowed");
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () =>
@@ -103,9 +111,20 @@ export default function ManageProjects() {
     if (!form.name || !form.domain || !form.category)
       return toast.warning("Fill all required fields");
 
+    // Sanitize input data
+    const sanitizedForm = {
+      name: DOMPurify.sanitize(form.name),
+      description: DOMPurify.sanitize(form.description),
+      imageUrl: form.imageUrl,
+      domain: form.domain,
+      category: form.category,
+      taglines: form.taglines.map((t) => DOMPurify.sanitize(t)),
+      badge: form.badge,
+    };
+
     setLoading(true);
     try {
-      await API.post("/projects", form);
+      await API.post("/projects", sanitizedForm);
       toast.success("Project created");
       resetForm();
       loadProjects();
@@ -166,9 +185,17 @@ export default function ManageProjects() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    // Sanitize updated data
+    const sanitizedEditForm = {
+      ...editForm,
+      name: DOMPurify.sanitize(editForm.name),
+      description: DOMPurify.sanitize(editForm.description),
+      taglines: editForm.taglines.map((t) => DOMPurify.sanitize(t)),
+    };
+
     setLoading(true);
     try {
-      await API.put(`/projects/${editForm._id}`, editForm);
+      await API.put(`/projects/${editForm._id}`, sanitizedEditForm);
       toast.success("Project updated");
       setEditModal(false);
       loadProjects();

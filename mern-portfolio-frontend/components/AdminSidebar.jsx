@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import API from "../api/api";
+import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing
 
 const handleLogout = async () => {
   try {
@@ -9,6 +10,11 @@ const handleLogout = async () => {
   } catch (err) {
     console.error("Logout failed:", err);
   }
+};
+
+// Function to sanitize content
+const sanitizeContent = (content) => {
+  return DOMPurify.sanitize(content);
 };
 
 const AdminNavbar = () => {
@@ -21,7 +27,6 @@ const AdminNavbar = () => {
     ["Links", "/admin/links"],
     ["Stats", "/admin/stats"],
     ["Contacts", "/admin/contacts"],
-    
   ];
 
   // Common styles
@@ -86,7 +91,8 @@ const AdminNavbar = () => {
                   isActive ? { ...linkStyle, ...activeLinkStyle } : linkStyle
                 }
               >
-                {label}
+                {/* Sanitize label before displaying */}
+                {sanitizeContent(label)}
               </NavLink>
             ))}
 

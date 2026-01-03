@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import axios from "axios";
+import DOMPurify from "dompurify"; // Import DOMPurify for sanitizing
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -16,13 +17,26 @@ const Footer = () => {
     github: "",
   });
 
+  // Sanitize URLs before setting them in state
+  const sanitizeLink = (link) => {
+    // If the link exists and is a valid URL, sanitize it
+    return link && typeof link === "string" ? DOMPurify.sanitize(link) : "";
+  };
+
   // Fetch links from backend
   useEffect(() => {
     const fetchLinks = async () => {
       try {
         const res = await axios.get(`${API_BASE}/links`, { withCredentials: true });
         if (res.data) {
-          setLinks(res.data);
+          // Sanitize the links before setting them in state
+          setLinks({
+            facebook: sanitizeLink(res.data.facebook),
+            twitter: sanitizeLink(res.data.twitter),
+            instagram: sanitizeLink(res.data.instagram),
+            linkedin: sanitizeLink(res.data.linkedin),
+            github: sanitizeLink(res.data.github),
+          });
         }
       } catch (err) {
         console.error("Failed to fetch social links:", err);
@@ -75,29 +89,7 @@ const Footer = () => {
 
         {/* Social Media Icons with text */}
         <div className="footer-icons" style={{ marginTop: "10px" }}>
-          {links.facebook && (
-            <a
-              href={links.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              style={{
-                color: "var(--text-light)",
-                margin: "0 10px",
-                transition: "transform 0.3s ease, color 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "scale(1.1)";
-                e.target.style.color = "var(--primary-gold)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "scale(1)";
-                e.target.style.color = "var(--text-light)";
-              }}
-            >
-              <FaFacebook size={24} />
-            </a>
-          )}
+          
           {links.twitter && (
             <a
               href={links.twitter}
@@ -167,29 +159,7 @@ const Footer = () => {
               <FaLinkedin size={24} />
             </a>
           )}
-          {links.github && (
-            <a
-              href={links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              style={{
-                color: "var(--text-light)",
-                margin: "0 10px",
-                transition: "transform 0.3s ease, color 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "scale(1.1)";
-                e.target.style.color = "var(--primary-gold)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "scale(1)";
-                e.target.style.color = "var(--text-light)";
-              }}
-            >
-              <FaGithub size={24} />
-            </a>
-          )}
+          
         </div>
 
         {/* Footer Text */}
