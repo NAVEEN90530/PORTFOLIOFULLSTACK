@@ -23,6 +23,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageDomain from "../pages/admin/ManageDomain";
 import { Container } from "react-bootstrap";
+import WhatsAppRedirect from "../pages/WhatsAppButton";
 
 
 // Admin Layout (Reusable)
@@ -34,9 +35,9 @@ const AdminLayout = ({ children }) => (
 );
 
 function App() {
-   useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);  // Scrolls to the top of the page
-  }, []); 
+  }, []);
 
   return (
     <BrowserRouter>
@@ -56,12 +57,12 @@ function App() {
 
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<><AppNavbar /><Home /><Footer /></>} />
-        <Route path="/about" element={<><AppNavbar /><About /><Footer /></>} />
-        <Route path="/services" element={<><AppNavbar /><Services /><Footer /></>} />
-        <Route path="/projects" element={<><AppNavbar /><Projects /><Footer /></>} />
-        <Route path="/process" element={<><AppNavbar /><Process /><Footer /></>} />
-        <Route path="/get-in-touch" element={<><AppNavbar /><Contact /><Footer /></>} />
+        <Route path="/" element={<><AppNavbar /><Home /><Footer /> <WhatsAppRedirect /> </>} />
+        <Route path="/about" element={<><AppNavbar /><About /><Footer /> <WhatsAppRedirect /> </>} />
+        <Route path="/services" element={<><AppNavbar /><Services /><Footer /> <WhatsAppRedirect /> </>} />
+        <Route path="/projects" element={<><AppNavbar /><Projects /><Footer /> <WhatsAppRedirect /> </>} />
+        <Route path="/process" element={<><AppNavbar /><Process /><Footer /> <WhatsAppRedirect /> </>} />
+        <Route path="/get-in-touch" element={<><AppNavbar /><Contact /><Footer /> <WhatsAppRedirect /> </>} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<Login />} />
@@ -116,7 +117,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/admin/stats"
           element={
@@ -148,9 +149,12 @@ function App() {
           }
         />
 
+        
+
         {/* 404 Page */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      
     </BrowserRouter>
   );
 }

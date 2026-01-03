@@ -43,38 +43,7 @@ export default function About() {
         concept.
       </p>
 
-      <p style={{ lineHeight: "1.7", fontSize: "1.5rem", opacity: 0.9, marginBottom: "1rem" }}>
-        We deliver accurate CAD models in industry-standard formats:
-      </p>
-
-
-{/* File Formats */}
-<div
-  className="mt-3 mb-4"
-  style={{
-    fontSize: "1.5rem",
-    lineHeight: "1.7",
-    textAlign: "center", // centers the whole block
-  }}
->
-  {["STEP", "IGES", "Parasolid", "DWG", "DXF", "STP"].map((format) => (
-    <div
-      key={format}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        cursor:"pointer",
-        gap: "8px",
-        marginBottom: "4px",
-      }}
-    >
-      <FaCheckCircle style={{ color: "#FFFFFF" }} /> {/* white icon */}
-      <span style={{ color: "var(--button-gold)", fontWeight: 600 }}>
-        {format}
-      </span>
-    </div>
-  ))}
-</div>
+      
 
 <div className="gold-line"></div>
 

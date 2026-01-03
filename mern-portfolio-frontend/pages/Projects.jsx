@@ -1,179 +1,173 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../api/api";
-import ProjectCard from "../components/ProjectCard";
 import ProjectModal from "../components/ProjectModal";
+import ProjectCard from "../components/ProjectCard";
 import Insights from "./Insights";
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
-  const [domainsWithCategories, setDomainsWithCategories] = useState([]);
+  const [domains, setDomains] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [filterDomain, setFilterDomain] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
   const [loadingProjects, setLoadingProjects] = useState(true);
-  const [error, setError] = useState(null);
-  const [categoryOptions, setCategoryOptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Fetch domains with their categories
-  useEffect(() => {
-    const fetchDomains = async () => {
-      try {
-        const res = await API.get("/domains/with-categories");
-        setDomainsWithCategories(res.data);
-      } catch (err) {
-        console.error("Error fetching domains with categories:", err);
-        setError("Failed to load domains and categories.");
-      }
-    };
-
-    fetchDomains();
-  }, []);
-
-  // Extract domain and category from URL
+  // Read domain and category query from URL on first load
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const domainFromQuery = params.get("domain") || "";
     const categoryFromQuery = params.get("category") || "all";
 
-    // Debugging the URL parameters:
-    console.log("Domain from URL:", domainFromQuery);
-    console.log("Category from URL:", categoryFromQuery);
-
     setFilterDomain(domainFromQuery);
     setFilterCategory(categoryFromQuery);
 
+    loadDomains();
+    loadCategories();
     loadProjects(domainFromQuery, categoryFromQuery);
   }, [location.search]);
 
-  // Load Projects based on domain and category
-  const loadProjects = async (domain = "", category = "all") => {
-    console.log("Loading projects with domain:", domain, "and category:", category); // Debugging
+  // Fetch projects based on filters
+  const loadProjects = async (domain, category) => {
     try {
       setLoadingProjects(true);
       const res = await API.get("/projects", { params: { domain, category } });
-      
-      // Debugging the API response:
-      console.log("Projects loaded:", res.data);
-
       setProjects(res.data);
     } catch (err) {
       console.error("Failed to fetch projects:", err);
-      setError("Failed to load projects.");
     } finally {
       setLoadingProjects(false);
     }
   };
 
-  // Filter categories based on selected domain
-  useEffect(() => {
-    if (filterDomain) {
-      const domain = domainsWithCategories.find((d) => d.slug === filterDomain);
-      setCategoryOptions(domain ? domain.categories : []);
+  // Fetch domains for the domain filter
+  const loadDomains = async () => {
+    try {
+      const res = await API.get("/domains");
+      setDomains(res.data);
+    } catch (err) {
+      console.error("Failed to fetch domains:", err);
     }
-  }, [filterDomain, domainsWithCategories]);
-
-  // Handles when domain is changed
-  const handleDomainChange = (e) => {
-    const newDomain = e.target.value;
-    console.log("Domain selected:", newDomain); // Debugging domain change
-
-    setFilterDomain(newDomain);
-    setFilterCategory("all"); // reset category when domain changes
-    navigate(`/projects?domain=${newDomain}`); // Update URL with domain
   };
 
-  // Handles when category is changed
-  const handleCategoryChange = (e) => {
-    const newCategorySlug = e.target.value;
-    console.log("Category selected:", newCategorySlug); // Debugging category change
-
-    setFilterCategory(newCategorySlug);
-    navigate(`/projects?domain=${filterDomain}&category=${newCategorySlug}`); // Update URL with category
+  // Fetch categories for the category filter
+  const loadCategories = async () => {
+    try {
+      const res = await API.get("/categories");
+      setCategories(res.data);
+    } catch (err) {
+      console.error("Failed to fetch categories:", err);
+    }
   };
 
-  // Open Project Modal
+  // Open project details in a modal
   const openModal = (project) => {
     setSelectedProject(project);
     setShowModal(true);
   };
 
-  // Close Project Modal
+  // Close the modal
   const closeModal = () => {
-    setShowModal(false);
     setSelectedProject(null);
+    setShowModal(false);
   };
+
+  // Handle domain change in the dropdown
+  const handleDomainChange = (e) => {
+    const newDomain = e.target.value;
+    setFilterDomain(newDomain);
+    setFilterCategory("all"); // reset category when domain changes
+    navigate(`/projects?domain=${newDomain}`); // update URL with domain
+  };
+
+  // Handle category change in the dropdown
+  const handleCategoryChange = (e) => {
+    const newCategory = e.target.value;
+    setFilterCategory(newCategory);
+    navigate(`/projects?domain=${filterDomain}&category=${newCategory}`); // update URL with category
+  };
+
+  // Filter projects based on selected domain and category
+  const filteredProjects = projects.filter((p) => {
+    const matchesDomain = !filterDomain || p.domain?.slug === filterDomain;
+    const matchesCategory = filterCategory === "all" || p.category?._id === filterCategory;
+    return matchesDomain && matchesCategory;
+  });
+
+  // Categories filtered by selected domain
+  const domainCategories = categories.filter((cat) =>
+    filterDomain
+      ? projects.some((p) => p.domain?.slug === filterDomain && p.category?._id === cat._id)
+      : true
+  );
 
   return (
     <div className="container py-5">
       <Insights />
+
       <div className="gold-line"></div>
+
       <h2 className="section-title text-center mt-3 mb-5" style={{ color: "#FFD700" }}>
         Projects
       </h2>
 
-      {error && <p className="text-danger text-center">{error}</p>}
-
-      {/* Filters Container */}
-      <div className="row mb-3">
-        <div className="col-md-3 mb-2">
-          <label className="form-label text-light">Filter by Domain:</label>
+      <div className="d-flex flex-wrap align-items-center justify-content-center gap-4 mb-4">
+        {/* Domain Filter */}
+        <div className="d-flex gap-2 align-items-center">
+          <label className="text-light mb-0 fw-bold">Domain:</label>
           <select
-            className="form-control bg-dark text-light border-0"
+            className="form-select form-select-sm"
             value={filterDomain}
             onChange={handleDomainChange}
-            style={{ padding: "10px", borderRadius: "8px" }}
           >
             <option value="">All Domains</option>
-            {domainsWithCategories.map((d) => (
-              <option key={d._id} value={d.slug}>
-                {d.name}
+            {domains.map((domain) => (
+              <option key={domain._id} value={domain.slug}>
+                {domain.name}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="col-md-3 mb-2">
-          <label className="form-label text-light">Filter by Category:</label>
+        {/* Category Filter */}
+        <div className="d-flex gap-2 align-items-center">
+          <label className="text-light mb-0 fw-bold">Category:</label>
           <select
-            className="form-control bg-dark text-light border-0"
+            className="form-select form-select-sm"
             value={filterCategory}
             onChange={handleCategoryChange}
-            style={{ padding: "10px", borderRadius: "8px" }}
           >
             <option value="all">All Categories</option>
-            {categoryOptions.map((category) => (
-              <option key={category._id} value={category.slug}>
-                {category.name}
+            {domainCategories.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
               </option>
             ))}
           </select>
         </div>
       </div>
 
+
       {/* Project Cards */}
       {loadingProjects ? (
         <p className="text-light text-center">Loading projects...</p>
-      ) : projects.length === 0 ? (
+      ) : filteredProjects.length === 0 ? (
         <p className="text-light text-center">No projects available.</p>
       ) : (
         <div className="row">
-          {projects.map((p) => (
+          {filteredProjects.map((p) => (
             <ProjectCard key={p._id} project={p} onClick={openModal} />
           ))}
         </div>
       )}
 
       {/* Project Modal */}
-      <ProjectModal
-        showModal={showModal}
-        closeModal={closeModal}
-        selectedProject={selectedProject}
-      />
+      <ProjectModal showModal={showModal} closeModal={closeModal} selectedProject={selectedProject} />
     </div>
   );
 }
