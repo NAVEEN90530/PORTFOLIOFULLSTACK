@@ -24,7 +24,7 @@ export const createDomain = async (data) => {
    UPDATE DOMAIN
 ================================ */
 export const updateDomain = async (id, data) => {
-  const response = await axios.put(${API_URL}/${id}, data, {
+  const response = await axios.put(`${API_URL}/${id}`, data, {
     withCredentials: true,
   });
   return response.data;
@@ -34,7 +34,7 @@ export const updateDomain = async (id, data) => {
    DELETE DOMAIN
 ================================ */
 export const deleteDomain = async (id) => {
-  const response = await axios.delete(${API_URL}/${id}, {
+  const response = await axios.delete(`${API_URL}/${id}`, {
     withCredentials: true,
   });
   return response.data;
