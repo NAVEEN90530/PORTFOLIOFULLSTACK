@@ -7,11 +7,14 @@ const sendEmail = async (to, subject, message) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: Number(process.env.SMTP_PORT) === 465, // true if port 465
+      port: 587, // ✅ ALWAYS use 587 on Render
+      secure: false, // ❌ false for 587
       auth: {
-        user: process.env.SMTP_USER.trim(),
-        pass: process.env.SMTP_PASS.trim(),
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false, // ✅ IMPORTANT for Render
       },
     });
 
@@ -19,12 +22,14 @@ const sendEmail = async (to, subject, message) => {
       from: `"${process.env.SMTP_FROM_NAME}" <${process.env.SMTP_FROM_EMAIL}>`,
       to,
       subject,
-      html: message, 
+      html: message,
     });
 
-    // console.log("📩 Email sent successfully");
+    console.log("📩 Email sent successfully");
+    return true;
   } catch (error) {
-    console.log("❌ Email not send error:", error.message);
+    console.error("❌ Email error:", error);
+    return false;
   }
 };
 
