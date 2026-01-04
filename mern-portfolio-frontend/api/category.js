@@ -30,7 +30,7 @@ export const createCategory = async (categoryData) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error creating category:", error.response?.data  error.message);
+    console.error("Error creating category:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -45,7 +45,7 @@ export const updateCategory = async (id, data) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error updating category:", error.response?.data  error.message);
+    console.error("Error updating category:", error.response?.data || error.message);
     throw error;
   }
 };
