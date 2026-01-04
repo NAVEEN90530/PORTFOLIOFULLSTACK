@@ -8,7 +8,7 @@ const AppNavbar = () => {
     ["About Us", "/about"],
     ["Our Services", "/services"],
     ["Contact us", "/get-in-touch"],
-    // ["Admin", "/admin/login"],
+     ["Admin", "/admin/login"],
   ];
 
   // Inline styles
