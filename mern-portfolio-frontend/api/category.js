@@ -15,7 +15,7 @@ export const listCategories = async () => {
 ================================ */
 export const listDomainCategories = async (domainId = "") => {
   // Include API_URL so the request goes to the backend
-  const url = domainId ? ${API_URL}?domain=${domainId} : API_URL;
+  const url = domainId ? `${API_URL}?domain=${domainId}` : API_URL;
   const { data } = await axios.get(url);
   return data;
 };
@@ -55,7 +55,7 @@ export const updateCategory = async (id, data) => {
 ================================ */
 export const deleteCategory = async (id) => {
   try {
-    const response = await axios.delete(${API_URL}/${id}, {
+    const response = await axios.delete(`${API_URL}/${id}`, {
       withCredentials: true,
     });
     return response.data;
