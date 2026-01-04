@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const VITE_API_URL = "https://auroxdemo.onrender.com";
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL + "/api",
+  baseURL: `${VITE_API_URL}/api`,
   withCredentials: true,
 });
 
